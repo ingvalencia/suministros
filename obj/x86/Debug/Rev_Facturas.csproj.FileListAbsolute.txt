@@ -1,0 +1,10 @@
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Debug\Rev_Facturas.exe.config
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Debug\Rev_Facturas.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Debug\Rev_Facturas.pdb
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\Rev_Facturas.Form1.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\Rev_Facturas.Properties.Resources.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\Rev_Facturas.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\Rev_Facturas.pdb
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog

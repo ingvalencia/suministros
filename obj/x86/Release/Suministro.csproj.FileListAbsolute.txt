@@ -1,0 +1,40 @@
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.exe.config
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.pdb
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmAutenticacion.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmCantidad.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmPrincipal.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.Properties.Resources.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.pdb
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.exe.config
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.exe
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.pdb
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.exe
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\bin\Release\Suministro.pdb
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmAutenticacion.resources
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmCantidad.resources
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmPrincipal.resources
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.Properties.Resources.resources
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.csproj.GenerateResource.Cache
+C:\Users\claudioc\Documents\Projects\Suministro\Rev_Facturas\obj\x86\Release\Suministro.csprojResolveAssemblyReference.cache
+C:\Proyect\Suministro\Rev_Facturas\bin\Release\Suministro.exe.config
+C:\Proyect\Suministro\Rev_Facturas\obj\x86\Release\Suministro.exe
+C:\Proyect\Suministro\Rev_Facturas\obj\x86\Release\Suministro.pdb
+C:\hdejesus_diniz\OneDrive - Franquicias Recorcholis, S.A. de C.V\Apps_Diniz\Suministro\Rev_Facturas\bin\Release\Suministro.exe.config
+C:\hdejesus_diniz\OneDrive - Franquicias Recorcholis, S.A. de C.V\Apps_Diniz\Suministro\Rev_Facturas\obj\x86\Release\Suministro.exe
+C:\hdejesus_diniz\OneDrive - Franquicias Recorcholis, S.A. de C.V\Apps_Diniz\Suministro\Rev_Facturas\obj\x86\Release\Suministro.pdb
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\bin\Release\Suministro.exe.config
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.exe
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.pdb
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\bin\Release\Suministro.exe
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\bin\Release\Suministro.pdb
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.csprojResolveAssemblyReference.cache
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmAutenticacion.resources
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmCantidad.resources
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.frmPrincipal.resources
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.Properties.Resources.resources
+C:\hdejesus\ProyDINIZ\Programacion_C#\Suministro\Rev_Facturas\obj\x86\Release\Suministro.csproj.GenerateResource.Cache

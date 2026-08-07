@@ -1,0 +1,66 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Suministro.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SAP_Servidor" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.0.174</Value>
+    </Setting>
+    <Setting Name="SAP_Usuario" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sa</Value>
+    </Setting>
+    <Setting Name="SAP_Contrasena" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">P@ssw0rd</Value>
+    </Setting>
+    <Setting Name="BaseSAP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">VESER</Value>
+    </Setting>
+    <Setting Name="OINV" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">OINV</Value>
+    </Setting>
+    <Setting Name="OPOR" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">OPOR</Value>
+    </Setting>
+    <Setting Name="INV1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">INV1</Value>
+    </Setting>
+    <Setting Name="POR1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">POR1</Value>
+    </Setting>
+    <Setting Name="BaseRS" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BUFFER</Value>
+    </Setting>
+    <Setting Name="RECEPCION_CAB" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">RS_RECEPCION_CAB</Value>
+    </Setting>
+    <Setting Name="SUMINISTRO_CAB" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">RS_SUMINISTRO_CAB</Value>
+    </Setting>
+    <Setting Name="CONFIRMACIONES" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">RS_CONFIRMACIONES</Value>
+    </Setting>
+    <Setting Name="RECEPCION_DET" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">RS_RECEPCION_DET</Value>
+    </Setting>
+    <Setting Name="SUMINISTRO_DET" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">RS_SUMINISTRO_DET</Value>
+    </Setting>
+    <Setting Name="STS_TOTAL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">T</Value>
+    </Setting>
+    <Setting Name="STS_PARCIAL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">P</Value>
+    </Setting>
+    <Setting Name="RECEPCION" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">R</Value>
+    </Setting>
+    <Setting Name="SUMINISTRO" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">S</Value>
+    </Setting>
+    <Setting Name="SERVER" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">LDAP://grupodiniz.com.mx</Value>
+    </Setting>
+    <Setting Name="STS_PRELI" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">R</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

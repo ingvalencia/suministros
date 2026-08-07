@@ -1,0 +1,15 @@
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Release\Rev_Facturas.exe.config
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Release\Rev_Facturas.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\bin\Release\Rev_Facturas.pdb
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.frmAutenticacion.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.frmCantidad.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.frmPrincipal.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.Properties.Resources.resources
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Rev_Facturas\Rev_Facturas\obj\x86\Release\Rev_Facturas.pdb
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\bin\Release\Rev_Facturas.exe.config
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Rev_Facturas.exe
+C:\Users\ChristianS\Desktop\Desarrollos\Projects\Suministro\Rev_Facturas\obj\x86\Release\Rev_Facturas.pdb
