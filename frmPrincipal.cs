@@ -61,6 +61,14 @@ namespace Suministro
         private List<TextBox> txtFacturasDinamicas = new List<TextBox>();
         private int cantidadFacturasTrabajo = 3;
 
+        private Panel pnlBuscadorDetalle;
+        private TextBox txtBuscarDetalle;
+        private ComboBox cmbCampoBusqueda;
+        private Button btnBuscarDetalle;
+        private Button btnLimpiarBusqueda;
+        private Label lblBuscarDetalle;
+
+
         public frmPrincipal()
         {
             InitializeComponent();
@@ -117,6 +125,8 @@ namespace Suministro
             InicializarInformacionHistorica();
 
             InicializarCapturaFacturas();
+
+            InicializarBuscadorDetalle();
         }
 
         private void InicializarCapturaFacturas()
@@ -281,6 +291,641 @@ namespace Suministro
 
             this.gpb_fact.BringToFront();
         }
+
+        private void InicializarBuscadorDetalle()
+        {
+            pnlBuscadorDetalle =
+                new Panel();
+
+            pnlBuscadorDetalle.Name =
+                "pnlBuscadorDetalle";
+
+            pnlBuscadorDetalle.Height =
+                42;
+
+            pnlBuscadorDetalle.Dock =
+                DockStyle.Top;
+
+            pnlBuscadorDetalle.BackColor =
+                Color.FromArgb(
+                    235,
+                    241,
+                    247);
+
+            pnlBuscadorDetalle.Padding =
+                new Padding(
+                    8,
+                    6,
+                    8,
+                    6);
+
+            lblBuscarDetalle =
+                new Label();
+
+            lblBuscarDetalle.Text =
+                "Buscar:";
+
+            lblBuscarDetalle.Font =
+                new Font(
+                    "Segoe UI",
+                    9F,
+                    FontStyle.Bold);
+
+            lblBuscarDetalle.ForeColor =
+                Color.FromArgb(
+                    45,
+                    55,
+                    65);
+
+            lblBuscarDetalle.AutoSize =
+                true;
+
+            lblBuscarDetalle.Location =
+                new Point(
+                    10,
+                    12);
+
+            txtBuscarDetalle =
+                new TextBox();
+
+            txtBuscarDetalle.Name =
+                "txtBuscarDetalle";
+
+            txtBuscarDetalle.Font =
+                new Font(
+                    "Segoe UI",
+                    9F,
+                    FontStyle.Regular);
+
+            txtBuscarDetalle.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            txtBuscarDetalle.BackColor =
+                Color.White;
+
+            txtBuscarDetalle.Location =
+                new Point(
+                    70,
+                    8);
+
+            txtBuscarDetalle.Size =
+                new Size(
+                    280,
+                    27);
+
+            txtBuscarDetalle.Anchor =
+                AnchorStyles.Top |
+                AnchorStyles.Left;
+
+            txtBuscarDetalle.KeyDown +=
+                txtBuscarDetalle_KeyDown;
+
+            cmbCampoBusqueda =
+                new ComboBox();
+
+            cmbCampoBusqueda.Name =
+                "cmbCampoBusqueda";
+
+            cmbCampoBusqueda.DropDownStyle =
+                ComboBoxStyle.DropDownList;
+
+            cmbCampoBusqueda.Font =
+                new Font(
+                    "Segoe UI",
+                    9F,
+                    FontStyle.Regular);
+
+            cmbCampoBusqueda.Location =
+                new Point(
+                    360,
+                    8);
+
+            cmbCampoBusqueda.Size =
+                new Size(
+                    150,
+                    27);
+
+            cmbCampoBusqueda.Items.Add(
+                "Todos");
+
+            cmbCampoBusqueda.Items.Add(
+                "Factura");
+
+            cmbCampoBusqueda.Items.Add(
+                "Documento");
+
+            cmbCampoBusqueda.Items.Add(
+                "Código Barras");
+
+            cmbCampoBusqueda.Items.Add(
+                "Código Artículo");
+
+            cmbCampoBusqueda.Items.Add(
+                "Descripción");
+
+            cmbCampoBusqueda.SelectedIndex =
+                0;
+
+            btnBuscarDetalle =
+                new Button();
+
+            btnBuscarDetalle.Name =
+                "btnBuscarDetalle";
+
+            btnBuscarDetalle.Text =
+                "Buscar";
+
+            btnBuscarDetalle.Font =
+                new Font(
+                    "Segoe UI",
+                    8.5F,
+                    FontStyle.Bold);
+
+            btnBuscarDetalle.Size =
+                new Size(
+                    80,
+                    27);
+
+            btnBuscarDetalle.Location =
+                new Point(
+                    520,
+                    7);
+
+            btnBuscarDetalle.FlatStyle =
+                FlatStyle.Flat;
+
+            btnBuscarDetalle.FlatAppearance.BorderSize =
+                0;
+
+            btnBuscarDetalle.BackColor =
+                Color.FromArgb(
+                    31,
+                    78,
+                    121);
+
+            btnBuscarDetalle.ForeColor =
+                Color.White;
+
+            btnBuscarDetalle.Cursor =
+                Cursors.Hand;
+
+            btnBuscarDetalle.Click +=
+                btnBuscarDetalle_Click;
+
+            btnLimpiarBusqueda =
+                new Button();
+
+            btnLimpiarBusqueda.Name =
+                "btnLimpiarBusqueda";
+
+            btnLimpiarBusqueda.Text =
+                "Limpiar";
+
+            btnLimpiarBusqueda.Font =
+                new Font(
+                    "Segoe UI",
+                    8.5F,
+                    FontStyle.Regular);
+
+            btnLimpiarBusqueda.Size =
+                new Size(
+                    75,
+                    27);
+
+            btnLimpiarBusqueda.Location =
+                new Point(
+                    608,
+                    7);
+
+            btnLimpiarBusqueda.FlatStyle =
+                FlatStyle.Flat;
+
+            btnLimpiarBusqueda.FlatAppearance.BorderColor =
+                Color.FromArgb(
+                    180,
+                    190,
+                    200);
+
+            btnLimpiarBusqueda.BackColor =
+                Color.White;
+
+            btnLimpiarBusqueda.ForeColor =
+                Color.FromArgb(
+                    45,
+                    45,
+                    45);
+
+            btnLimpiarBusqueda.Cursor =
+                Cursors.Hand;
+
+            btnLimpiarBusqueda.Click +=
+                btnLimpiarBusqueda_Click;
+
+            pnlBuscadorDetalle.Controls.Add(
+                lblBuscarDetalle);
+
+            pnlBuscadorDetalle.Controls.Add(
+                txtBuscarDetalle);
+
+            pnlBuscadorDetalle.Controls.Add(
+                cmbCampoBusqueda);
+
+            pnlBuscadorDetalle.Controls.Add(
+                btnBuscarDetalle);
+
+            pnlBuscadorDetalle.Controls.Add(
+                btnLimpiarBusqueda);
+
+            splitContainer1.Panel2.Controls.Add(
+                pnlBuscadorDetalle);
+
+            pnlBuscadorDetalle.BringToFront();
+
+            int diferencia =
+                pnlBuscadorDetalle.Height;
+
+            dgv_fact.Top =
+                diferencia + 3;
+
+            dgv_fact.Height =
+                Math.Max(
+                    100,
+                    dgv_fact.Height -
+                    diferencia);
+
+            dgv_fact.BringToFront();
+            pnlBuscadorDetalle.BringToFront();
+        }
+
+        private void btnBuscarDetalle_Click(
+            object sender,
+            EventArgs e)
+                {
+                    BuscarEnDetalle();
+        }
+
+        private void txtBuscarDetalle_KeyDown(
+        object sender,
+        KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+
+                    BuscarEnDetalle();
+                }
+        }
+
+
+        private void BuscarEnDetalle()
+        {
+            if (dgv_fact == null ||
+                dgv_fact.Rows.Count == 0)
+            {
+                MessageBox.Show(
+                    "No hay información para buscar.",
+                    "Buscar",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            string texto =
+                txtBuscarDetalle.Text
+                    .Trim();
+
+            if (texto == "")
+            {
+                MessageBox.Show(
+                    "Capture un dato para buscar.",
+                    "Buscar",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                txtBuscarDetalle.Focus();
+
+                return;
+            }
+
+            string textoBusqueda =
+                texto.ToUpper();
+
+            string campoSeleccionado =
+                cmbCampoBusqueda.SelectedItem == null
+                    ? "Todos"
+                    : cmbCampoBusqueda
+                        .SelectedItem
+                        .ToString();
+
+            int filaInicial =
+                0;
+
+            if (dgv_fact.CurrentRow != null)
+            {
+                filaInicial =
+                    dgv_fact.CurrentRow.Index + 1;
+
+                if (filaInicial >=
+                    dgv_fact.Rows.Count)
+                {
+                    filaInicial = 0;
+                }
+            }
+
+            int filaEncontrada =
+                BuscarCoincidenciaDetalle(
+                    filaInicial,
+                    dgv_fact.Rows.Count,
+                    textoBusqueda,
+                    campoSeleccionado);
+
+            if (filaEncontrada < 0 &&
+                filaInicial > 0)
+            {
+                filaEncontrada =
+                    BuscarCoincidenciaDetalle(
+                        0,
+                        filaInicial,
+                        textoBusqueda,
+                        campoSeleccionado);
+            }
+
+            if (filaEncontrada < 0)
+            {
+                System.Media.SystemSounds.Beep.Play();
+
+                MessageBox.Show(
+                    "No se encontró ninguna coincidencia para:\n\n" +
+                    texto,
+                    "Buscar",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                txtBuscarDetalle.SelectAll();
+                txtBuscarDetalle.Focus();
+
+                return;
+            }
+
+            dgv_fact.ClearSelection();
+
+            DataGridViewRow fila =
+                dgv_fact.Rows[
+                    filaEncontrada];
+
+            fila.Selected =
+                true;
+
+            DataGridViewCell celdaDestino =
+                ObtenerCeldaBusqueda(
+                    fila,
+                    campoSeleccionado);
+
+            if (celdaDestino == null)
+            {
+                celdaDestino =
+                    fila.Cells["Factura"];
+            }
+
+            dgv_fact.CurrentCell =
+                celdaDestino;
+
+            try
+            {
+                dgv_fact.FirstDisplayedScrollingRowIndex =
+                    filaEncontrada;
+            }
+            catch
+            {
+            }
+
+            tsl_estatus.BackColor =
+                Color.FromArgb(
+                    0,
+                    120,
+                    90);
+
+            tsl_estatus.ForeColor =
+                Color.White;
+
+            tsl_estatus.Text =
+                "Registro encontrado: " +
+                Convert.ToString(
+                    fila.Cells["Factura"].Value) +
+                " | " +
+                Convert.ToString(
+                    fila.Cells["Descripcion"].Value);
+        }
+
+        private int BuscarCoincidenciaDetalle(
+    int inicio,
+    int fin,
+    string textoBusqueda,
+    string campoSeleccionado)
+        {
+            for (int i = inicio;
+                 i < fin;
+                 i++)
+            {
+                DataGridViewRow fila =
+                    dgv_fact.Rows[i];
+
+                if (fila.IsNewRow)
+                {
+                    continue;
+                }
+
+                bool encontrado =
+                    false;
+
+                if (campoSeleccionado ==
+                    "Factura")
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "Factura",
+                            textoBusqueda);
+                }
+                else if (campoSeleccionado ==
+                         "Documento")
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "Documento",
+                            textoBusqueda);
+                }
+                else if (campoSeleccionado ==
+                         "Código Barras")
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "CodigoBar",
+                            textoBusqueda);
+                }
+                else if (campoSeleccionado ==
+                         "Código Artículo")
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "CodigoArt",
+                            textoBusqueda);
+                }
+                else if (campoSeleccionado ==
+                         "Descripción")
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "Descripcion",
+                            textoBusqueda);
+                }
+                else
+                {
+                    encontrado =
+                        CeldaContiene(
+                            fila,
+                            "Factura",
+                            textoBusqueda) ||
+
+                        CeldaContiene(
+                            fila,
+                            "Documento",
+                            textoBusqueda) ||
+
+                        CeldaContiene(
+                            fila,
+                            "CodigoBar",
+                            textoBusqueda) ||
+
+                        CeldaContiene(
+                            fila,
+                            "CodigoArt",
+                            textoBusqueda) ||
+
+                        CeldaContiene(
+                            fila,
+                            "Descripcion",
+                            textoBusqueda);
+                }
+
+                if (encontrado)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private bool CeldaContiene(
+    DataGridViewRow fila,
+    string nombreColumna,
+    string textoBusqueda)
+        {
+            if (fila == null)
+            {
+                return false;
+            }
+
+            if (!dgv_fact.Columns.Contains(
+                nombreColumna))
+            {
+                return false;
+            }
+
+            object valor =
+                fila.Cells[
+                    nombreColumna].Value;
+
+            if (valor == null ||
+                valor == DBNull.Value)
+            {
+                return false;
+            }
+
+            string contenido =
+                valor
+                    .ToString()
+                    .Trim()
+                    .ToUpper();
+
+            return contenido.Contains(
+                textoBusqueda);
+        }
+
+        private DataGridViewCell ObtenerCeldaBusqueda(
+    DataGridViewRow fila,
+    string campoSeleccionado)
+        {
+            if (fila == null)
+            {
+                return null;
+            }
+
+            string nombreColumna =
+                "Factura";
+
+            if (campoSeleccionado ==
+                "Documento")
+            {
+                nombreColumna =
+                    "Documento";
+            }
+            else if (campoSeleccionado ==
+                     "Código Barras")
+            {
+                nombreColumna =
+                    "CodigoBar";
+            }
+            else if (campoSeleccionado ==
+                     "Código Artículo")
+            {
+                nombreColumna =
+                    "CodigoArt";
+            }
+            else if (campoSeleccionado ==
+                     "Descripción")
+            {
+                nombreColumna =
+                    "Descripcion";
+            }
+
+            if (!dgv_fact.Columns.Contains(
+                nombreColumna))
+            {
+                return null;
+            }
+
+            return fila.Cells[
+                nombreColumna];
+        }
+
+        private void btnLimpiarBusqueda_Click(
+        object sender,
+        EventArgs e)
+            {
+                txtBuscarDetalle.Text =
+                    "";
+
+                cmbCampoBusqueda.SelectedIndex =
+                    0;
+
+                dgv_fact.ClearSelection();
+
+                tsl_estatus.Text =
+                    "";
+
+                tsl_estatus.BackColor =
+                    Color.LightSteelBlue;
+
+                txtBuscarDetalle.Focus();
+        }
+
 
         private void btnCantidadFacturas_Click(
             object sender,
@@ -954,7 +1599,7 @@ namespace Suministro
                 Properties.Settings.Default.BaseRS);
 
             consultaEmpaques.AsignaSQL(
-                "SELECT DISTINCT " +
+                "SELECT " +
                 "NumFac, " +
                 "NoCaja " +
                 "FROM " + TablaCD + " " +
@@ -968,38 +1613,122 @@ namespace Suministro
             DataTable empaques =
                 consultaEmpaques.ObtieneTabla();
 
+            HashSet<string> cajasContadas =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> bolsasContadas =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> plasticosContados =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> paquetesContados =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
             if (empaques != null)
             {
                 foreach (DataRow fila in empaques.Rows)
                 {
-                    string noCaja = "";
-
-                    if (fila["NoCaja"] != null &&
-                        fila["NoCaja"] != DBNull.Value)
-                    {
-                        noCaja =
-                            fila["NoCaja"]
+                    string factura =
+                        fila["NumFac"] == DBNull.Value
+                            ? ""
+                            : fila["NumFac"]
                                 .ToString()
                                 .Trim()
                                 .ToUpper();
-                    }
 
-                    if (noCaja == "")
+                    string noCaja =
+                        fila["NoCaja"] == DBNull.Value
+                            ? ""
+                            : fila["NoCaja"]
+                                .ToString()
+                                .Trim()
+                                .ToUpper();
+
+                    if (noCaja == "" ||
+                        noCaja == "0")
                     {
                         continue;
                     }
 
-                    if (noCaja.Contains("C"))
+                    noCaja =
+                        noCaja
+                            .Replace(";", ",")
+                            .Replace("/", ",")
+                            .Replace("\\", ",");
+
+                    string[] empaquesIndividuales =
+                        noCaja.Split(
+                            new char[] { ',' },
+                            StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string empaqueBase in
+                        empaquesIndividuales)
                     {
-                        cantidadCajas++;
-                    }
-                    else if (noCaja.Contains("B"))
-                    {
-                        cantidadBolsas++;
-                    }
-                    else if (noCaja.Contains("P"))
-                    {
-                        cantidadPaquetes++;
+                        string empaque =
+                            empaqueBase
+                                .Trim()
+                                .Replace(" ", "")
+                                .ToUpper();
+
+                        if (empaque == "" ||
+                            empaque == "0")
+                        {
+                            continue;
+                        }
+
+                        string clave =
+                            factura +
+                            "|" +
+                            empaque;
+
+                        if (empaque.StartsWith("CP"))
+                        {
+                            if (!plasticosContados.Contains(clave))
+                            {
+                                plasticosContados.Add(clave);
+                                cantidadPlastico++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("C"))
+                        {
+                            if (!cajasContadas.Contains(clave))
+                            {
+                                cajasContadas.Add(clave);
+                                cantidadCajas++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("B"))
+                        {
+                            if (!bolsasContadas.Contains(clave))
+                            {
+                                bolsasContadas.Add(clave);
+                                cantidadBolsas++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("P"))
+                        {
+                            if (!paquetesContados.Contains(clave))
+                            {
+                                paquetesContados.Add(clave);
+                                cantidadPaquetes++;
+                            }
+
+                            continue;
+                        }
                     }
                 }
             }
@@ -1651,57 +2380,194 @@ namespace Suministro
             }
         }
 
-        private void btn_confirmar_Click(object sender, EventArgs e)
+        private void btn_confirmar_Click(
+    object sender,
+    EventArgs e)
         {
-            bool estatusConfirmar = true;
-            bool estatusConfirmar2 = true;
-
-            foreach (DataGridViewRow row in this.dgv_fact.Rows)
+            if (this.txt_temp.Visible)
             {
-                if (Convert.ToDouble(this.dgv_fact["CantidadF", row.Index].Value) != Convert.ToDouble(this.dgv_fact["CantidadR", row.Index].Value))
+                this.tmr_tiempo.Enabled =
+                    false;
+
+                ColocaCaja(
+                    nRenglon);
+
+                MarcaRenglon();
+            }
+
+            if (this.dgv_fact.IsCurrentCellInEditMode)
+            {
+                this.dgv_fact.EndEdit();
+            }
+
+            this.dgv_fact.CommitEdit(
+                DataGridViewDataErrorContexts.Commit);
+
+            bool estatusConfirmar =
+                true;
+
+            bool estatusConfirmar2 =
+                true;
+
+            foreach (DataGridViewRow row in
+                this.dgv_fact.Rows)
+            {
+                if (row.IsNewRow)
                 {
-                    MessageBox.Show("Linea No. " + this.dgv_fact.Rows[row.Index].HeaderCell.Value.ToString() + " : Cantidad incompleta.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    //this.tsl_estatus.Text = "Linea No. " + this.dgv_fact.Rows[row.Index].HeaderCell.Value.ToString() + " : Cantidad incompleta.";
-                    //this.tsl_estatus.BackColor = Color.Red;
+                    continue;
+                }
+
+                double cantidadFacturada =
+                    Convert.ToDouble(
+                        this.dgv_fact[
+                            "CantidadF",
+                            row.Index]
+                            .Value);
+
+                double cantidadRecibida =
+                    Convert.ToDouble(
+                        this.dgv_fact[
+                            "CantidadR",
+                            row.Index]
+                            .Value);
+
+                if (cantidadFacturada !=
+                    cantidadRecibida)
+                {
+                    MessageBox.Show(
+                        "Linea No. " +
+                        this.dgv_fact.Rows[
+                            row.Index]
+                            .HeaderCell
+                            .Value
+                            .ToString() +
+                        " : Cantidad incompleta.",
+                        "Advertencia",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+
+                    this.dgv_fact.CurrentCell =
+                        this.dgv_fact.Rows[
+                            row.Index]
+                            .Cells["CantidadR"];
+
+                    this.dgv_fact.Rows[
+                        row.Index]
+                        .Selected =
+                        true;
+
                     this.dgv_fact.Focus();
-                    estatusConfirmar = false;
+
+                    estatusConfirmar =
+                        false;
+
                     break;
                 }
             }
 
-            if (estatusConfirmar)
+            if (!estatusConfirmar)
             {
-                foreach (DataGridViewRow row in this.dgv_fact.Rows)
+                return;
+            }
+
+            foreach (DataGridViewRow row in
+                this.dgv_fact.Rows)
+            {
+                if (row.IsNewRow)
                 {
-                    try
+                    continue;
+                }
+
+                try
+                {
+                    string numeroCaja =
+                        this.dgv_fact[
+                            "Caja",
+                            row.Index]
+                            .Value == null
+                            ? ""
+                            : this.dgv_fact[
+                                "Caja",
+                                row.Index]
+                                .Value
+                                .ToString()
+                                .Trim();
+
+                    if (numeroCaja == "" ||
+                        numeroCaja == "0")
                     {
-                        if (this.dgv_fact["Caja", row.Index].Value.ToString() == "0" || this.dgv_fact["Caja", row.Index].Value.ToString().Trim() == "")
-                        {
-                            MessageBox.Show("Linea No. " + this.dgv_fact.Rows[row.Index].HeaderCell.Value.ToString() + " : No tiene número de caja asignada.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            //this.tsl_estatus.Text = "Linea No. " + this.dgv_fact.Rows[row.Index].HeaderCell.Value.ToString() + " : No tiene número de caja asignada.";
-                            //this.tsl_estatus.BackColor = Color.Red;
-                            this.dgv_fact.Focus();
-                            estatusConfirmar2 = false;
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Número de caja inválido.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //this.tsl_estatus.Text = "Número de caja inválido.";
-                        //this.tsl_estatus.BackColor = Color.Red;
+                        MessageBox.Show(
+                            "Linea No. " +
+                            this.dgv_fact.Rows[
+                                row.Index]
+                                .HeaderCell
+                                .Value
+                                .ToString() +
+                            " : No tiene número de caja asignada.",
+                            "Advertencia",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+
+                        this.dgv_fact.CurrentCell =
+                            this.dgv_fact.Rows[
+                                row.Index]
+                                .Cells["Caja"];
+
+                        this.dgv_fact.Rows[
+                            row.Index]
+                            .Selected =
+                            true;
+
                         this.dgv_fact.Focus();
-                        estatusConfirmar2 = false;
+
+                        estatusConfirmar2 =
+                            false;
+
                         break;
                     }
                 }
-                if (estatusConfirmar2)
+                catch
                 {
-                    FechaFin = DateTime.Now.ToString().Replace(" p.m.", "").Replace(" a.m.", "").Replace(" p. m.", "").Replace(" a. m.", "");
-                    this.txt_fechafin.Text = FechaFin;
-                    GrabaConfirmacion();
+                    MessageBox.Show(
+                        "Número de caja inválido.",
+                        "",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    this.dgv_fact.Focus();
+
+                    estatusConfirmar2 =
+                        false;
+
+                    break;
                 }
             }
+
+            if (!estatusConfirmar2)
+            {
+                return;
+            }
+
+            FechaFin =
+                DateTime.Now
+                    .ToString()
+                    .Replace(
+                        " p.m.",
+                        "")
+                    .Replace(
+                        " a.m.",
+                        "")
+                    .Replace(
+                        " p. m.",
+                        "")
+                    .Replace(
+                        " a. m.",
+                        "");
+
+            this.txt_fechafin.Text =
+                FechaFin;
+
+            GrabaConfirmacion();
         }
 
         private bool ValidaFacturaConfirmada(string NumFact, int TotFact)
