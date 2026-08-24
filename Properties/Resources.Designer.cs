@@ -94,5 +94,14 @@ namespace Suministro.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+
+        internal static System.Drawing.Bitmap VESER
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("VESER", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

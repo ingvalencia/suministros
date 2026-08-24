@@ -45,6 +45,22 @@ namespace Suministro
         private int i = 0;
         private Boolean Encontrado = false;
 
+
+        private Panel pnlInformacionHistorica;
+        private DataGridView dgvHistorialFacturas;
+        private Label lblResumenCajas;
+        private Label lblResumenBolsas;
+        private Label lblResumenPlastico;
+        private Label lblResumenPaquetes;
+        private Label lblFacturaActual;
+        private int splitterDistanceNormal = 157;
+        private int splitterDistanceHistorial = 250;
+
+        private FlowLayoutPanel pnlFacturasDinamicas;
+        private Button btnCantidadFacturas;
+        private List<TextBox> txtFacturasDinamicas = new List<TextBox>();
+        private int cantidadFacturasTrabajo = 3;
+
         public frmPrincipal()
         {
             InitializeComponent();
@@ -64,14 +80,30 @@ namespace Suministro
             estatusProceso = false;
             t_flagEstadoFacturas = false;
             this.tmr_tiempo.Enabled = false;
-            FechaIni = DateTime.Now.ToString().Replace(" p.m.", "").Replace(" a.m.", "").Replace(" p. m.", "").Replace(" a. m.", "");
-            FechaFin = DateTime.Now.ToString().Replace(" p.m.", "").Replace(" a.m.", "").Replace(" p. m.", "").Replace(" a. m.", "");
+
+            FechaIni = DateTime.Now.ToString()
+                .Replace(" p.m.", "")
+                .Replace(" a.m.", "")
+                .Replace(" p. m.", "")
+                .Replace(" a. m.", "");
+
+            FechaFin = DateTime.Now.ToString()
+                .Replace(" p.m.", "")
+                .Replace(" a.m.", "")
+                .Replace(" p. m.", "")
+                .Replace(" a. m.", "");
+
             this.txt_fechaini.Text = FechaIni;
+
             dtFact = new DataTable();
             dtDetFact = new DataTable();
+
             this.tsl_estatus.BackColor = Color.LightSteelBlue;
+
             LimpiaPantalla();
+
             txtCodeBar.Visible = false;
+
             this.btn_pdfDetalle.Image = CrearIconoPdf();
             this.btn_pdfResumen.Image = CrearIconoPdf();
 
@@ -80,65 +112,955 @@ namespace Suministro
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
 
-            splitContainer1.SplitterDistance = 157;
+            splitContainer1.SplitterDistance = splitterDistanceNormal;
+
+            InicializarInformacionHistorica();
+
+            InicializarCapturaFacturas();
         }
 
-        private void btn_busq_Click(object sender, EventArgs e)
+        private void InicializarCapturaFacturas()
         {
-            string t_facturas = "";
-            int t_contFact = 0;
+            Control contenedor = this.txt_fact1.Parent;
 
-            if (TablaH == "" || (this.txt_fact1.Text.Trim() == "" && this.txt_fact2.Text.Trim() == "" && this.txt_fact3.Text.Trim() == ""))
+            int xInicial = this.txt_fact1.Left;
+            int yInicial = this.txt_fact1.Top;
+            int alto = this.txt_fact1.Height;
+
+            this.txt_fact1.Visible = false;
+            this.txt_fact2.Visible = false;
+            this.txt_fact3.Visible = false;
+
+            btnCantidadFacturas = new Button();
+
+            btnCantidadFacturas.Name = "btnCantidadFacturas";
+            btnCantidadFacturas.Text = "3 Facturas";
+            btnCantidadFacturas.Font = new Font(
+                "Segoe UI",
+                8.5F,
+                FontStyle.Bold);
+
+            btnCantidadFacturas.Size =
+                new Size(95, alto + 4);
+
+            btnCantidadFacturas.Location =
+                new Point(
+                    xInicial,
+                    yInicial - 2);
+
+            btnCantidadFacturas.FlatStyle =
+                FlatStyle.Flat;
+
+            btnCantidadFacturas.FlatAppearance.BorderSize = 1;
+
+            btnCantidadFacturas.BackColor =
+                Color.FromArgb(31, 78, 121);
+
+            btnCantidadFacturas.ForeColor =
+                Color.White;
+
+            btnCantidadFacturas.Cursor =
+                Cursors.Hand;
+
+            btnCantidadFacturas.Click +=
+                btnCantidadFacturas_Click;
+
+            pnlFacturasDinamicas =
+                new FlowLayoutPanel();
+
+            pnlFacturasDinamicas.Name =
+                "pnlFacturasDinamicas";
+            int inicioFacturas =
+    xInicial;
+
+            int margenDerecho =
+                15;
+
+            int segundaFilaY =
+                btnCantidadFacturas.Bottom + 7;
+
+            pnlFacturasDinamicas.Location =
+                new Point(
+                    inicioFacturas,
+                    segundaFilaY);
+
+            pnlFacturasDinamicas.Size =
+    new Size(
+        Math.Max(
+            150,
+            contenedor.ClientSize.Width -
+            inicioFacturas -
+            margenDerecho),
+        58);
+
+            pnlFacturasDinamicas.Anchor =
+                AnchorStyles.Top |
+                AnchorStyles.Left |
+                AnchorStyles.Right;
+
+            pnlFacturasDinamicas.FlowDirection =
+                FlowDirection.LeftToRight;
+
+            pnlFacturasDinamicas.WrapContents =
+                false;
+
+            pnlFacturasDinamicas.AutoScroll =
+                true;
+
+            pnlFacturasDinamicas.HorizontalScroll.Enabled =
+                true;
+
+            pnlFacturasDinamicas.HorizontalScroll.Visible =
+                true;
+
+            pnlFacturasDinamicas.VerticalScroll.Enabled =
+                false;
+
+            pnlFacturasDinamicas.VerticalScroll.Visible =
+                false;
+
+            pnlFacturasDinamicas.Padding =
+                new Padding(
+                    4,
+                    2,
+                    4,
+                    16);
+
+            pnlFacturasDinamicas.BackColor =
+                Color.Transparent;
+
+            contenedor.Controls.Add(
+    btnCantidadFacturas);
+
+            contenedor.Controls.Add(
+                pnlFacturasDinamicas);
+
+            btnCantidadFacturas.BringToFront();
+            pnlFacturasDinamicas.BringToFront();
+
+            this.btn_busq.Location =
+                new Point(
+                    btnCantidadFacturas.Right + 10,
+                    btnCantidadFacturas.Top);
+
+            this.btn_busq.Size =
+                new Size(
+                    82,
+                    btnCantidadFacturas.Height);
+
+            this.btn_busq.Anchor =
+                AnchorStyles.Top |
+                AnchorStyles.Left;
+
+            this.btn_busq.BringToFront();
+
+            CrearCamposFacturas(
+                cantidadFacturasTrabajo);
+
+            int margenEntreFacturasYDatos = 12;
+
+            int nuevaPosicionDatos =
+                pnlFacturasDinamicas.Bottom +
+                margenEntreFacturasYDatos;
+
+            this.gpb_fact.Top =
+                nuevaPosicionDatos;
+
+            int alturaNecesariaPanelSuperior =
+                this.gpb_fact.Bottom + 8;
+
+            splitterDistanceNormal =
+                alturaNecesariaPanelSuperior;
+
+            if (splitContainer1.Height >
+                alturaNecesariaPanelSuperior + 100)
             {
-                MessageBox.Show("¡Seleccione el tipo de movimiento de mercancía!", "Movimiento", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                //this.tsl_estatus.BackColor = Color.Red;
-                //this.tsl_estatus.Text = "Error: Seleccione movimiento de mercancía.";
+                splitContainer1.SplitterDistance =
+                    alturaNecesariaPanelSuperior;
+            }
+
+            this.gpb_fact.BringToFront();
+        }
+
+        private void btnCantidadFacturas_Click(
+            object sender,
+            EventArgs e)
+        {
+            using (Form ventana = new Form())
+            {
+                ventana.Text =
+                    "Cantidad de facturas";
+
+                ventana.StartPosition =
+                    FormStartPosition.CenterParent;
+
+                ventana.FormBorderStyle =
+                    FormBorderStyle.FixedDialog;
+
+                ventana.MaximizeBox = false;
+                ventana.MinimizeBox = false;
+
+                ventana.ClientSize =
+                    new Size(360, 180);
+
+                ventana.BackColor =
+                    Color.White;
+
+                Label titulo =
+                    new Label();
+
+                titulo.Text =
+                    "¿Cuántas facturas va a trabajar?";
+
+                titulo.Font =
+                    new Font(
+                        "Segoe UI",
+                        11F,
+                        FontStyle.Bold);
+
+                titulo.AutoSize = false;
+
+                titulo.TextAlign =
+                    ContentAlignment.MiddleCenter;
+
+                titulo.Location =
+                    new Point(
+                        20,
+                        20);
+
+                titulo.Size =
+                    new Size(
+                        320,
+                        30);
+
+                NumericUpDown cantidad =
+                    new NumericUpDown();
+
+                cantidad.Minimum = 1;
+                cantidad.Maximum = 15;
+
+                cantidad.Value =
+                    cantidadFacturasTrabajo;
+
+                cantidad.Font =
+                    new Font(
+                        "Segoe UI",
+                        14F,
+                        FontStyle.Bold);
+
+                cantidad.TextAlign =
+                    HorizontalAlignment.Center;
+
+                cantidad.Location =
+                    new Point(
+                        125,
+                        65);
+
+                cantidad.Size =
+                    new Size(
+                        110,
+                        32);
+
+                Button aceptar =
+                    new Button();
+
+                aceptar.Text =
+                    "Aceptar";
+
+                aceptar.Font =
+                    new Font(
+                        "Segoe UI",
+                        9F,
+                        FontStyle.Bold);
+
+                aceptar.BackColor =
+                    Color.FromArgb(
+                        31,
+                        78,
+                        121);
+
+                aceptar.ForeColor =
+                    Color.White;
+
+                aceptar.FlatStyle =
+                    FlatStyle.Flat;
+
+                aceptar.Location =
+                    new Point(
+                        125,
+                        115);
+
+                aceptar.Size =
+                    new Size(
+                        110,
+                        35);
+
+                aceptar.DialogResult =
+                    DialogResult.OK;
+
+                ventana.Controls.Add(
+                    titulo);
+
+                ventana.Controls.Add(
+                    cantidad);
+
+                ventana.Controls.Add(
+                    aceptar);
+
+                ventana.AcceptButton =
+                    aceptar;
+
+                if (ventana.ShowDialog(this) ==
+                    DialogResult.OK)
+                {
+                    cantidadFacturasTrabajo =
+                        Convert.ToInt32(
+                            cantidad.Value);
+
+                    btnCantidadFacturas.Text =
+                        cantidadFacturasTrabajo == 1
+                            ? "1 Factura"
+                            : cantidadFacturasTrabajo +
+                              " Facturas";
+
+                    CrearCamposFacturas(
+                        cantidadFacturasTrabajo);
+                }
+            }
+        }
+
+        private void CrearCamposFacturas(
+    int cantidad)
+        {
+            List<string> valoresActuales =
+                new List<string>();
+
+            foreach (TextBox txt in
+                txtFacturasDinamicas)
+            {
+                if (txt.Text.Trim() != "")
+                {
+                    valoresActuales.Add(
+                        txt.Text.Trim());
+                }
+            }
+
+            pnlFacturasDinamicas.Controls.Clear();
+            txtFacturasDinamicas.Clear();
+
+            for (int i = 0; i < cantidad; i++)
+            {
+                TextBox txt =
+                    new TextBox();
+
+                txt.Name =
+                    "txt_factura_dinamica_" +
+                    (i + 1);
+
+                txt.Width = 105;
+
+                txt.AutoSize = false;
+                txt.Height = 30;
+
+                txt.Font =
+                    new Font(
+                        "Segoe UI",
+                        9F,
+                        FontStyle.Regular);
+
+                txt.TextAlign =
+                    HorizontalAlignment.Center;
+
+                txt.BorderStyle =
+                    BorderStyle.FixedSingle;
+
+                txt.BackColor =
+                    Color.White;
+
+                txt.ForeColor =
+                    Color.FromArgb(
+                        35,
+                        45,
+                        55);
+
+                txt.MaxLength = 30;
+
+                txt.Margin =
+                    new Padding(
+                        5,
+                        3,
+                        5,
+                        3);
+
+                if (i < valoresActuales.Count)
+                {
+                    txt.Text =
+                        valoresActuales[i];
+                }
+
+                txt.Tag = i;
+
+                txt.KeyPress +=
+                    txtFacturaDinamica_KeyPress;
+
+                txt.TextChanged +=
+                    txtFacturaDinamica_TextChanged;
+
+                txt.Enter +=
+                    delegate
+                    {
+                        txt.BackColor =
+                            Color.FromArgb(
+                                245,
+                                250,
+                                255);
+                    };
+
+                txt.Leave +=
+                    delegate
+                    {
+                        txt.BackColor =
+                            Color.White;
+                    };
+
+                txtFacturasDinamicas.Add(
+                    txt);
+
+                pnlFacturasDinamicas.Controls.Add(
+                    txt);
+            }
+
+            if (txtFacturasDinamicas.Count > 0)
+            {
+                txtFacturasDinamicas[0].Focus();
+            }
+        }
+
+        private void txtFacturaDinamica_KeyPress(
+            object sender,
+            KeyPressEventArgs e)
+        {
+            if (char.IsLetterOrDigit(e.KeyChar) ||
+                e.KeyChar == (char)Keys.Back)
+            {
+                e.Handled = false;
+            }
+            else if (e.KeyChar ==
+                     (char)Keys.Enter)
+            {
+                e.Handled = true;
+
+                TextBox actual =
+                    sender as TextBox;
+
+                int indice =
+                    txtFacturasDinamicas.IndexOf(
+                        actual);
+
+                if (indice >= 0 &&
+                    indice <
+                    txtFacturasDinamicas.Count - 1)
+                {
+                    txtFacturasDinamicas[
+                        indice + 1].Focus();
+                }
+                else
+                {
+                    btn_busq_Click(
+                        sender,
+                        EventArgs.Empty);
+                }
             }
             else
             {
-                Cursor.Current = Cursors.WaitCursor;
-                if (this.txt_fact1.Text.Trim() != "" && this.txt_fact1.Text.Trim().Length > 2)
-                {
-                    t_facturas += "'" + this.txt_fact1.Text + "'";
-                    t_contFact += 1;
-                }
-                if (this.txt_fact2.Text.Trim() != "" && this.txt_fact2.Text.Trim().Length > 2)
-                {
-                    t_facturas += "'" + this.txt_fact2.Text + "'";
-                    t_contFact += 1;
-                }
-                if (this.txt_fact3.Text.Trim() != "" && this.txt_fact3.Text.Trim().Length > 2)
-                {
-                    t_facturas += "'" + this.txt_fact3.Text + "'";
-                    t_contFact += 1;
-                }
-                t_facturas = t_facturas.Replace("''", "','");
+                e.Handled = true;
+            }
+        }
 
-                if (ValidaFacturaConfirmada(t_facturas, t_contFact))
+        private void txtFacturaDinamica_TextChanged(
+            object sender,
+            EventArgs e)
+        {
+            this.txt_prov.Text = "";
+            this.txt_sub.Text = "";
+            this.txt_imp.Text = "";
+            this.txt_tot.Text = "";
+
+            if (dtFact != null)
+            {
+                dtFact.Clear();
+            }
+
+            if (dtDetFact != null)
+            {
+                dtDetFact.Clear();
+            }
+        }
+
+        private List<string> ObtenerFacturasCapturadas()
+        {
+            List<string> facturas =
+                new List<string>();
+
+            if (txtFacturasDinamicas == null)
+            {
+                return facturas;
+            }
+
+            foreach (TextBox txt in
+                txtFacturasDinamicas)
+            {
+                string factura =
+                    txt.Text.Trim();
+
+                if (factura != "" &&
+                    factura.Length > 2 &&
+                    !facturas.Contains(factura))
+                {
+                    facturas.Add(
+                        factura);
+                }
+            }
+
+            return facturas;
+        }
+
+        private string ObtenerFacturasSql()
+        {
+            List<string> facturas =
+                ObtenerFacturasCapturadas();
+
+            List<string> resultado =
+                new List<string>();
+
+            foreach (string factura in facturas)
+            {
+                resultado.Add(
+                    "'" +
+                    factura.Replace(
+                        "'",
+                        "''") +
+                    "'");
+            }
+
+            return string.Join(
+                ",",
+                resultado.ToArray());
+        }
+
+        private string ObtenerFacturaActual()
+        {
+            List<string> facturas =
+                ObtenerFacturasCapturadas();
+
+            if (facturas.Count == 0)
+            {
+                return "";
+            }
+
+            return facturas[
+                facturas.Count - 1];
+        }
+
+        private void btn_busq_Click(
+    object sender,
+    EventArgs e)
+        {
+            List<string> facturas =
+                ObtenerFacturasCapturadas();
+
+            string t_facturas =
+                ObtenerFacturasSql();
+
+            int t_contFact =
+                facturas.Count;
+
+            if (TablaH == "")
+            {
+                MessageBox.Show(
+                    "¡Seleccione el tipo de movimiento de mercancía!",
+                    "Movimiento",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return;
+            }
+
+            if (t_contFact == 0)
+            {
+                MessageBox.Show(
+                    "Capture al menos una factura.",
+                    "Facturas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return;
+            }
+
+            if (t_contFact !=
+                cantidadFacturasTrabajo)
+            {
+                MessageBox.Show(
+                    "Indicó que trabajará " +
+                    cantidadFacturasTrabajo +
+                    " factura(s), pero solamente capturó " +
+                    t_contFact +
+                    ".",
+                    "Facturas incompletas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return;
+            }
+
+            Cursor.Current =
+                Cursors.WaitCursor;
+
+            try
+            {
+                if (ValidaFacturaConfirmada(
+                    t_facturas,
+                    t_contFact))
                 {
                     estatusProceso = false;
-                    this.btn_imprimir.Visible = true;
-                    ConsultaFacturaConfirmada(t_facturas, t_contFact);
+
+                    this.btn_imprimir.Visible =
+                        true;
+
+                    ConsultaFacturaConfirmada(
+                        t_facturas,
+                        t_contFact);
+
+                    MostrarInformacionHistorica(
+                        t_facturas);
                 }
                 else
                 {
                     if (t_flagEstadoFacturas)
                     {
                         estatusProceso = true;
-                        this.btn_imprimir.Visible = false;
-                        this.btn_pdfDetalle.Enabled = false;
-                        this.btn_pdfResumen.Enabled = false;
-                        DespliegaFactura(t_facturas, t_contFact);
+
+                        this.btn_imprimir.Visible =
+                            false;
+
+                        this.btn_pdfDetalle.Enabled =
+                            false;
+
+                        this.btn_pdfResumen.Enabled =
+                            false;
+
+                        DespliegaFactura(
+                            t_facturas,
+                            t_contFact);
+
                         GrabaPreliminar();
+
+                        MostrarInformacionHistorica(
+                            t_facturas);
                     }
                     else
                     {
-                        MessageBox.Show("¡No todas las facturas ingresadas están confirmadas!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        //this.tsl_estatus.BackColor = Color.Red;
-                        //this.tsl_estatus.Text = "Error: Sólo puede consultar documentos con el mismo estado.";
+                        OcultarInformacionHistorica();
+
+                        MessageBox.Show(
+                            "¡No todas las facturas ingresadas están confirmadas!",
+                            "Aviso",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
                     }
                 }
-                Cursor.Current = Cursors.Default;
+            }
+            finally
+            {
+                Cursor.Current =
+                    Cursors.Default;
+            }
+        }
+
+
+        private void MostrarInformacionHistorica(
+    string facturasSql)
+        {
+            if (string.IsNullOrWhiteSpace(facturasSql))
+            {
+                OcultarInformacionHistorica();
+                return;
+            }
+
+            string facturaActual =
+            ObtenerFacturaActual();
+
+            clss_Query consultaHistorial =
+                new clss_Query();
+
+            consultaHistorial.AsignaBase(
+                Properties.Settings.Default.BaseRS);
+
+            consultaHistorial.AsignaSQL(
+                "SELECT " +
+                "NumFac AS [Factura], " +
+                "MIN(FechaIni) AS [Inicio], " +
+                "MAX(FechaFin) AS [Fin] " +
+                "FROM " +
+                Properties.Settings.Default.CONFIRMACIONES + " " +
+                "WHERE NumFac IN (" + facturasSql + ") " +
+                "AND Tipo = '" + TablaCH + "' " +
+                "GROUP BY NumFac " +
+                "ORDER BY NumFac");
+
+            consultaHistorial.Execute_DT();
+
+            DataTable historial =
+                consultaHistorial.ObtieneTabla();
+
+            dgvHistorialFacturas.DataSource =
+                historial;
+
+            if (lblFacturaActual != null)
+            {
+                lblFacturaActual.Text =
+                    facturaActual == ""
+                        ? "EN PROCESO"
+                        : "EN PROCESO: " + facturaActual;
+            }
+
+            if (dgvHistorialFacturas.Columns.Contains(
+                "Factura"))
+            {
+                dgvHistorialFacturas
+                    .Columns["Factura"]
+                    .FillWeight = 60;
+            }
+
+            if (dgvHistorialFacturas.Columns.Contains(
+                "Inicio"))
+            {
+                dgvHistorialFacturas
+                    .Columns["Inicio"]
+                    .FillWeight = 120;
+
+                dgvHistorialFacturas
+                    .Columns["Inicio"]
+                    .DefaultCellStyle.Format =
+                    "dd/MM/yyyy HH:mm:ss";
+            }
+
+            if (dgvHistorialFacturas.Columns.Contains(
+                "Fin"))
+            {
+                dgvHistorialFacturas
+                    .Columns["Fin"]
+                    .FillWeight = 120;
+
+                dgvHistorialFacturas
+                    .Columns["Fin"]
+                    .DefaultCellStyle.Format =
+                    "dd/MM/yyyy HH:mm:ss";
+            }
+
+            foreach (DataGridViewRow fila in dgvHistorialFacturas.Rows)
+            {
+                string facturaFila =
+                    fila.Cells["Factura"].Value == null
+                        ? ""
+                        : fila.Cells["Factura"]
+                            .Value
+                            .ToString()
+                            .Trim();
+
+                if (facturaFila.Equals(
+                    facturaActual,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(
+                            220,
+                            245,
+                            232);
+
+                    fila.DefaultCellStyle.ForeColor =
+                        Color.FromArgb(
+                            20,
+                            85,
+                            55);
+
+                    fila.DefaultCellStyle.Font =
+                        new Font(
+                            "Segoe UI",
+                            8F,
+                            FontStyle.Bold);
+
+                    fila.DefaultCellStyle.SelectionBackColor =
+                        Color.FromArgb(
+                            190,
+                            230,
+                            208);
+
+                    fila.Selected =
+                        true;
+                }
+            }
+
+            MostrarResumenEmpaques(
+                facturasSql);
+
+            bool tieneInformacion =
+                historial != null &&
+                historial.Rows.Count > 0;
+
+            pnlInformacionHistorica.Visible =
+                tieneInformacion;
+
+            if (tieneInformacion)
+            {
+                int alturaNecesaria =
+                    gpb_fact.Bottom +
+                    pnlInformacionHistorica.Height +
+                    6;
+
+                if (alturaNecesaria <
+                    splitterDistanceNormal +
+                    pnlInformacionHistorica.Height)
+                {
+                    alturaNecesaria =
+                        splitterDistanceNormal +
+                        pnlInformacionHistorica.Height;
+                }
+
+                if (alturaNecesaria <
+                    splitContainer1.Height - 100)
+                {
+                    splitContainer1.SplitterDistance =
+                        alturaNecesaria;
+                }
+
+                pnlInformacionHistorica.BringToFront();
+            }
+        }
+
+
+        private void MostrarResumenEmpaques(
+    string facturasSql)
+        {
+            int cantidadCajas = 0;
+            int cantidadBolsas = 0;
+            int cantidadPlastico = 0;
+            int cantidadPaquetes = 0;
+
+            clss_Query consultaEmpaques =
+                new clss_Query();
+
+            consultaEmpaques.AsignaBase(
+                Properties.Settings.Default.BaseRS);
+
+            consultaEmpaques.AsignaSQL(
+                "SELECT DISTINCT " +
+                "NumFac, " +
+                "NoCaja " +
+                "FROM " + TablaCD + " " +
+                "WHERE NumFac IN (" + facturasSql + ") " +
+                "AND ISNULL(LTRIM(RTRIM(NoCaja)), '') <> '' " +
+                "AND LTRIM(RTRIM(NoCaja)) <> '0' " +
+                "ORDER BY NumFac, NoCaja");
+
+            consultaEmpaques.Execute_DT();
+
+            DataTable empaques =
+                consultaEmpaques.ObtieneTabla();
+
+            if (empaques != null)
+            {
+                foreach (DataRow fila in empaques.Rows)
+                {
+                    string noCaja = "";
+
+                    if (fila["NoCaja"] != null &&
+                        fila["NoCaja"] != DBNull.Value)
+                    {
+                        noCaja =
+                            fila["NoCaja"]
+                                .ToString()
+                                .Trim()
+                                .ToUpper();
+                    }
+
+                    if (noCaja == "")
+                    {
+                        continue;
+                    }
+
+                    if (noCaja.Contains("C"))
+                    {
+                        cantidadCajas++;
+                    }
+                    else if (noCaja.Contains("B"))
+                    {
+                        cantidadBolsas++;
+                    }
+                    else if (noCaja.Contains("P"))
+                    {
+                        cantidadPaquetes++;
+                    }
+                }
+            }
+
+            lblResumenCajas.Text =
+                cantidadCajas.ToString();
+
+            lblResumenBolsas.Text =
+                cantidadBolsas.ToString();
+
+            lblResumenPlastico.Text =
+                cantidadPlastico.ToString();
+
+            lblResumenPaquetes.Text =
+                cantidadPaquetes.ToString();
+        }
+
+        private void OcultarInformacionHistorica()
+        {
+            if (dgvHistorialFacturas != null)
+            {
+                dgvHistorialFacturas.DataSource =
+                    null;
+            }
+
+            if (lblResumenCajas != null)
+            {
+                lblResumenCajas.Text =
+                    "0";
+            }
+
+            if (lblResumenBolsas != null)
+            {
+                lblResumenBolsas.Text =
+                    "0";
+            }
+
+            if (lblResumenPlastico != null)
+            {
+                lblResumenPlastico.Text =
+                    "0";
+            }
+
+            if (lblResumenPaquetes != null)
+            {
+                lblResumenPaquetes.Text =
+                    "0";
+            }
+
+            if (pnlInformacionHistorica != null)
+            {
+                pnlInformacionHistorica.Visible =
+                    false;
+            }
+
+            if (splitContainer1 != null &&
+                splitContainer1.Height >
+                splitterDistanceNormal + 100)
+            {
+                splitContainer1.SplitterDistance =
+                    splitterDistanceNormal;
             }
         }
 
@@ -161,19 +1083,429 @@ namespace Suministro
             this.txt_fact1.Text = "";
             this.txt_fact2.Text = "";
             this.txt_fact3.Text = "";
+
+            if (txtFacturasDinamicas != null)
+            {
+                foreach (TextBox txt in
+                    txtFacturasDinamicas)
+                {
+                    txt.Text = "";
+                }
+            }
             this.txt_prov.Text = "";
             this.txt_sub.Text = "";
             this.txt_imp.Text = "";
             this.txt_tot.Text = "";
-            this.txt_fact1.Focus();
+
+            if (txtFacturasDinamicas != null &&
+                txtFacturasDinamicas.Count > 0)
+            {
+                txtFacturasDinamicas[0].Focus();
+            }
+            else
+            {
+                this.txt_fact1.Focus();
+            }
+
             this.gpb_fact.Visible = true;
+
             this.btn_confirmar.Enabled = false;
             this.btn_imprimir.Visible = false;
+
             this.rbn_sal.Checked = true;
+
             this.txt_prov.Enabled = false;
             this.txt_sub.Enabled = false;
             this.txt_imp.Enabled = false;
             this.txt_tot.Enabled = false;
+
+            OcultarInformacionHistorica();
+        }
+
+        private void InicializarInformacionHistorica()
+        {
+            pnlInformacionHistorica = new Panel();
+
+            pnlInformacionHistorica.Name = "pnlInformacionHistorica";
+            pnlInformacionHistorica.Dock = DockStyle.Bottom;
+            pnlInformacionHistorica.Height = 110;
+            pnlInformacionHistorica.BackColor = Color.FromArgb(242, 246, 250);
+            pnlInformacionHistorica.Padding = new Padding(6, 4, 6, 4);
+            pnlInformacionHistorica.Visible = false;
+
+            TableLayoutPanel contenedorPrincipal =
+                new TableLayoutPanel();
+
+            contenedorPrincipal.Dock = DockStyle.Fill;
+            contenedorPrincipal.ColumnCount = 2;
+            contenedorPrincipal.RowCount = 1;
+            contenedorPrincipal.BackColor = Color.Transparent;
+
+            contenedorPrincipal.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    64F));
+
+            contenedorPrincipal.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    36F));
+
+            Panel pnlHistorial =
+                new Panel();
+
+            pnlHistorial.Dock = DockStyle.Fill;
+            pnlHistorial.BackColor = Color.White;
+            pnlHistorial.Margin = new Padding(0, 0, 5, 0);
+
+            Panel pnlTituloHistorial =
+                new Panel();
+
+            pnlTituloHistorial.Dock = DockStyle.Top;
+            pnlTituloHistorial.Height = 24;
+            pnlTituloHistorial.BackColor =
+                Color.FromArgb(31, 78, 121);
+
+            Label lblTituloHistorial =
+                new Label();
+
+            lblTituloHistorial.Dock = DockStyle.Fill;
+            lblTituloHistorial.ForeColor = Color.White;
+
+            lblTituloHistorial.Font =
+                new Font(
+                    "Segoe UI",
+                    8.5F,
+                    FontStyle.Bold);
+
+            lblTituloHistorial.Text =
+                "  HISTORIAL DE FACTURAS";
+
+            lblTituloHistorial.TextAlign =
+                ContentAlignment.MiddleLeft;
+
+            lblFacturaActual =
+                new Label();
+
+            lblFacturaActual.Dock =
+                DockStyle.Right;
+
+            lblFacturaActual.Width =
+                235;
+
+            lblFacturaActual.BackColor =
+                Color.FromArgb(0, 120, 90);
+
+            lblFacturaActual.ForeColor =
+                Color.White;
+
+            lblFacturaActual.Font =
+                new Font(
+                    "Segoe UI",
+                    8.5F,
+                    FontStyle.Bold);
+
+            lblFacturaActual.Text =
+                "EN PROCESO:";
+
+            lblFacturaActual.TextAlign =
+                ContentAlignment.MiddleCenter;
+
+            pnlTituloHistorial.Controls.Add(
+                lblTituloHistorial);
+
+            pnlTituloHistorial.Controls.Add(
+                lblFacturaActual);
+
+            dgvHistorialFacturas =
+                new DataGridView();
+
+            dgvHistorialFacturas.Name =
+                "dgvHistorialFacturas";
+
+            dgvHistorialFacturas.Dock =
+                DockStyle.Fill;
+
+            dgvHistorialFacturas.BackgroundColor =
+                Color.White;
+
+            dgvHistorialFacturas.BorderStyle =
+                BorderStyle.None;
+
+            dgvHistorialFacturas.AllowUserToAddRows =
+                false;
+
+            dgvHistorialFacturas.AllowUserToDeleteRows =
+                false;
+
+            dgvHistorialFacturas.AllowUserToResizeRows =
+                false;
+
+            dgvHistorialFacturas.ReadOnly =
+                true;
+
+            dgvHistorialFacturas.MultiSelect =
+                false;
+
+            dgvHistorialFacturas.RowHeadersVisible =
+                false;
+
+            dgvHistorialFacturas.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
+
+            dgvHistorialFacturas.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvHistorialFacturas.EnableHeadersVisualStyles =
+                false;
+
+            dgvHistorialFacturas.ColumnHeadersHeight =
+                22;
+
+            dgvHistorialFacturas.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(45, 95, 145);
+
+            dgvHistorialFacturas.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dgvHistorialFacturas.ColumnHeadersDefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    8F,
+                    FontStyle.Bold);
+
+            dgvHistorialFacturas.ColumnHeadersDefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            dgvHistorialFacturas.DefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    8F,
+                    FontStyle.Regular);
+
+            dgvHistorialFacturas.DefaultCellStyle.BackColor =
+                Color.White;
+
+            dgvHistorialFacturas.DefaultCellStyle.ForeColor =
+                Color.FromArgb(45, 45, 45);
+
+            dgvHistorialFacturas.DefaultCellStyle.SelectionBackColor =
+                Color.FromArgb(221, 235, 247);
+
+            dgvHistorialFacturas.DefaultCellStyle.SelectionForeColor =
+                Color.FromArgb(30, 30, 30);
+
+            dgvHistorialFacturas.DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            dgvHistorialFacturas.GridColor =
+                Color.FromArgb(220, 225, 230);
+
+            dgvHistorialFacturas.RowTemplate.Height =
+                20;
+
+            pnlHistorial.Controls.Add(
+                dgvHistorialFacturas);
+
+            pnlHistorial.Controls.Add(
+                pnlTituloHistorial);
+
+            Panel pnlResumen =
+                new Panel();
+
+            pnlResumen.Dock = DockStyle.Fill;
+            pnlResumen.BackColor = Color.White;
+            pnlResumen.Margin = new Padding(5, 0, 0, 0);
+
+            Label lblTituloResumen =
+                new Label();
+
+            lblTituloResumen.Dock =
+                DockStyle.Top;
+
+            lblTituloResumen.Height =
+                24;
+
+            lblTituloResumen.BackColor =
+                Color.FromArgb(31, 78, 121);
+
+            lblTituloResumen.ForeColor =
+                Color.White;
+
+            lblTituloResumen.Font =
+                new Font(
+                    "Segoe UI",
+                    8.5F,
+                    FontStyle.Bold);
+
+            lblTituloResumen.Text =
+                "  RESUMEN DE EMPAQUE";
+
+            lblTituloResumen.TextAlign =
+                ContentAlignment.MiddleLeft;
+
+            TableLayoutPanel tarjetas =
+                new TableLayoutPanel();
+
+            tarjetas.Dock = DockStyle.Fill;
+            tarjetas.ColumnCount = 4;
+            tarjetas.RowCount = 1;
+            tarjetas.Padding = new Padding(3);
+            tarjetas.BackColor = Color.White;
+
+            tarjetas.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    25F));
+
+            tarjetas.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    25F));
+
+            tarjetas.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    25F));
+
+            tarjetas.ColumnStyles.Add(
+                new ColumnStyle(
+                    SizeType.Percent,
+                    25F));
+
+            Panel tarjetaCajas =
+                CrearTarjetaResumen(
+                    "CAJAS",
+                    out lblResumenCajas);
+
+            Panel tarjetaBolsas =
+                CrearTarjetaResumen(
+                    "BOLSAS",
+                    out lblResumenBolsas);
+
+            Panel tarjetaPlastico =
+                CrearTarjetaResumen(
+                    "C. PLÁSTICO",
+                    out lblResumenPlastico);
+
+            Panel tarjetaPaquetes =
+                CrearTarjetaResumen(
+                    "PAQUETES",
+                    out lblResumenPaquetes);
+
+            tarjetas.Controls.Add(
+                tarjetaCajas,
+                0,
+                0);
+
+            tarjetas.Controls.Add(
+                tarjetaBolsas,
+                1,
+                0);
+
+            tarjetas.Controls.Add(
+                tarjetaPlastico,
+                2,
+                0);
+
+            tarjetas.Controls.Add(
+                tarjetaPaquetes,
+                3,
+                0);
+
+            pnlResumen.Controls.Add(
+                tarjetas);
+
+            pnlResumen.Controls.Add(
+                lblTituloResumen);
+
+            contenedorPrincipal.Controls.Add(
+                pnlHistorial,
+                0,
+                0);
+
+            contenedorPrincipal.Controls.Add(
+                pnlResumen,
+                1,
+                0);
+
+            pnlInformacionHistorica.Controls.Add(
+                contenedorPrincipal);
+
+            splitContainer1.Panel1.Controls.Add(
+                pnlInformacionHistorica);
+
+            pnlInformacionHistorica.BringToFront();
+        }
+
+        private Panel CrearTarjetaResumen(
+    string titulo,
+    out Label etiquetaValor)
+        {
+            Panel tarjeta =
+                new Panel();
+
+            tarjeta.Dock =
+                DockStyle.Fill;
+
+            tarjeta.BackColor =
+                Color.FromArgb(248, 250, 252);
+
+            tarjeta.Margin =
+                new Padding(2);
+
+            Label etiquetaTitulo =
+                new Label();
+
+            etiquetaTitulo.Dock =
+                DockStyle.Top;
+
+            etiquetaTitulo.Height =
+                19;
+
+            etiquetaTitulo.ForeColor =
+                Color.FromArgb(80, 90, 100);
+
+            etiquetaTitulo.Font =
+                new Font(
+                    "Segoe UI",
+                    7F,
+                    FontStyle.Bold);
+
+            etiquetaTitulo.Text =
+                titulo;
+
+            etiquetaTitulo.TextAlign =
+                ContentAlignment.MiddleCenter;
+
+            etiquetaValor =
+                new Label();
+
+            etiquetaValor.Dock =
+                DockStyle.Fill;
+
+            etiquetaValor.ForeColor =
+                Color.FromArgb(31, 78, 121);
+
+            etiquetaValor.Font =
+                new Font(
+                    "Segoe UI",
+                    16F,
+                    FontStyle.Bold);
+
+            etiquetaValor.Text =
+                "0";
+
+            etiquetaValor.TextAlign =
+                ContentAlignment.MiddleCenter;
+
+            tarjeta.Controls.Add(
+                etiquetaValor);
+
+            tarjeta.Controls.Add(
+                etiquetaTitulo);
+
+            return tarjeta;
         }
 
         private void splitContainer1_Panel1_MouseMove(object sender, MouseEventArgs e)
@@ -397,104 +1729,368 @@ namespace Suministro
             }
         }
 
-        private void DespliegaFactura(string NumFact, int TotFact)
+        private void DespliegaFactura(
+    string NumFact,
+    int TotFact)
         {
-            clss_Query QryFact = new clss_Query();
-            clss_Query QryDetFact = new clss_Query();
+            clss_Query QryFact =
+                new clss_Query();
+
+            clss_Query QryDetFact =
+                new clss_Query();
+
             string documentos = "";
 
-            QryFact.AsignaBase(Properties.Settings.Default.BaseSAP);
-            //QryFact.AsignaSQL("SELECT DocNum,CardCode,CardName,DocTotal-VatSum,VatSum,DocTotal " +
-            //                  "FROM " + TablaH + " WHERE U_SERIE = '" + NumFact.Substring(0, 1) +
-            //                  "' AND U_NUMDOC = '" + NumFact.Substring(1) + "' ");
-            switch (TotFact)
-            {
-                case 1:
-                    QryFact.AsignaSQL("SELECT DocNum,CardCode,CardName,DocTotal-VatSum,VatSum,DocTotal " +
-                                      "FROM " + TablaH + " WHERE YEAR(DocDate)>=2017 AND U_SERIE = '" + NumFact.Replace("'", "").Split(',')[0].Substring(0, 1) + "' " +
-                                      "AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[0].Substring(1) + "' ");
-                    break;
-                case 2:
-                    QryFact.AsignaSQL("SELECT DocNum,CardCode,CardName,DocTotal-VatSum,VatSum,DocTotal " +
-                                      "FROM " + TablaH + " WHERE YEAR(DocDate)>=2017 AND (U_SERIE = '" + NumFact.Replace("'", "").Split(',')[0].Substring(0, 1) + "' " +
-                                      "AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[0].Substring(1) + "') " +
-                                      "OR (U_SERIE = '" + NumFact.Replace("'", "").Split(',')[1].Substring(0, 1) + "' " +
-                                      "    AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[1].Substring(1) + "') ");
-                    break;
-                case 3:
-                    QryFact.AsignaSQL("SELECT DocNum,CardCode,CardName,DocTotal-VatSum,VatSum,DocTotal " +
-                                      "FROM " + TablaH + " WHERE YEAR(DocDate)>=2017 AND (U_SERIE = '" + NumFact.Replace("'", "").Split(',')[0].Substring(0, 1) + "' " +
-                                      "AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[0].Substring(1) + "') " +
-                                      "OR (U_SERIE = '" + NumFact.Replace("'", "").Split(',')[1].Substring(0, 1) + "' " +
-                                      "    AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[1].Substring(1) + "') " +
-                                      "OR (U_SERIE = '" + NumFact.Replace("'", "").Split(',')[2].Substring(0, 1) + "' " +
-                                      "    AND U_NUMDOC = '" + NumFact.Replace("'", "").Split(',')[2].Substring(1) + "') ");
-                    break;
-                default:
-                    break;
-            }
-            QryFact.Execute_DT();
-            dtFact = QryFact.ObtieneTabla();
+            string[] facturas =
+                NumFact
+                    .Replace(
+                        "'",
+                        "")
+                    .Split(',');
 
-            for (int i = 0; i <= dtFact.Rows.Count - 1; i++)
+            List<string> condiciones =
+                new List<string>();
+
+            foreach (string facturaBase in
+                facturas)
             {
-                documentos += "'" + dtFact.Rows[i][0].ToString() + "'";
+                string factura =
+                    facturaBase.Trim();
+
+                if (factura.Length < 2)
+                {
+                    continue;
+                }
+
+                string serie =
+                    factura.Substring(
+                        0,
+                        1)
+                        .Replace(
+                            "'",
+                            "''");
+
+                string numero =
+                    factura.Substring(1)
+                        .Replace(
+                            "'",
+                            "''");
+
+                condiciones.Add(
+                    "(U_SERIE = '" +
+                    serie +
+                    "' AND U_NUMDOC = '" +
+                    numero +
+                    "')");
             }
-            documentos = documentos.Replace("''", "','");
+
+            if (condiciones.Count == 0)
+            {
+                MessageBox.Show(
+                    "No se capturaron facturas válidas.",
+                    "Documento",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return;
+            }
+
+            QryFact.AsignaBase(
+                Properties.Settings.Default.BaseSAP);
+
+            QryFact.AsignaSQL(
+                "SELECT DISTINCT " +
+                "DocNum," +
+                "CardCode," +
+                "CardName," +
+                "DocTotal-VatSum," +
+                "VatSum," +
+                "DocTotal " +
+                "FROM " +
+                TablaH +
+                " WHERE YEAR(DocDate)>=2017 " +
+                "AND (" +
+                string.Join(
+                    " OR ",
+                    condiciones.ToArray()) +
+                ")");
+
+            QryFact.Execute_DT();
+
+            dtFact =
+                QryFact.ObtieneTabla();
+
+            for (int i = 0;
+                 i <= dtFact.Rows.Count - 1;
+                 i++)
+            {
+                documentos +=
+                    "'" +
+                    dtFact.Rows[i][0].ToString() +
+                    "'";
+            }
+
+            documentos =
+                documentos.Replace(
+                    "''",
+                    "','");
 
             if (QryFact.ObtieneRegistros() > 0)
             {
+                if (dtFact.Rows.Count !=
+                    TotFact)
+                {
+                    Cursor.Current =
+                        Cursors.Default;
+
+                    MessageBox.Show(
+                        "Se solicitaron " +
+                        TotFact +
+                        " factura(s), pero SAP encontró " +
+                        dtFact.Rows.Count +
+                        ". Verifique los números capturados.",
+                        "Facturas",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+
+                    return;
+                }
+
                 this.txt_prov.Text = "";
                 this.txt_sub.Text = "";
                 this.txt_imp.Text = "";
                 this.txt_tot.Text = "";
-                for (int i = 0; i <= dtFact.Rows.Count - 1; i++)
+
+                for (int i = 0;
+                     i <= dtFact.Rows.Count - 1;
+                     i++)
                 {
-                    this.txt_prov.Text += dtFact.Rows[i][1].ToString() + "  -  " + dtFact.Rows[i][2].ToString().Replace(":", "") + ":" + char.ConvertFromUtf32(13) + char.ConvertFromUtf32(10);
-                    this.txt_sub.Text += "$ " + string.Format("{0:00.00}", dtFact.Rows[i][3]) + ":" + char.ConvertFromUtf32(13) + char.ConvertFromUtf32(10);
-                    this.txt_imp.Text += "$ " + string.Format("{0:00.00}", dtFact.Rows[i][4]) + ":" + char.ConvertFromUtf32(13) + char.ConvertFromUtf32(10);
-                    this.txt_tot.Text += "$ " + string.Format("{0:00.00}", dtFact.Rows[i][5]) + ":" + char.ConvertFromUtf32(13) + char.ConvertFromUtf32(10);
+                    this.txt_prov.Text +=
+                        dtFact.Rows[i][1].ToString() +
+                        "  -  " +
+                        dtFact.Rows[i][2]
+                            .ToString()
+                            .Replace(
+                                ":",
+                                "") +
+                        ":" +
+                        char.ConvertFromUtf32(13) +
+                        char.ConvertFromUtf32(10);
+
+                    this.txt_sub.Text +=
+                        "$ " +
+                        string.Format(
+                            "{0:00.00}",
+                            dtFact.Rows[i][3]) +
+                        ":" +
+                        char.ConvertFromUtf32(13) +
+                        char.ConvertFromUtf32(10);
+
+                    this.txt_imp.Text +=
+                        "$ " +
+                        string.Format(
+                            "{0:00.00}",
+                            dtFact.Rows[i][4]) +
+                        ":" +
+                        char.ConvertFromUtf32(13) +
+                        char.ConvertFromUtf32(10);
+
+                    this.txt_tot.Text +=
+                        "$ " +
+                        string.Format(
+                            "{0:00.00}",
+                            dtFact.Rows[i][5]) +
+                        ":" +
+                        char.ConvertFromUtf32(13) +
+                        char.ConvertFromUtf32(10);
                 }
-                QryDetFact.AsignaBase(Properties.Settings.Default.BaseSAP);
-                QryDetFact.AsignaSQL("SELECT CAST(T0.U_Serie AS NVARCHAR(1))+CAST(T0.U_NumDoc AS NVARCHAR (10)) 'Factura',T0.DocNum 'Documento',ISNULL(T2.U_COD_BAR_PAQ,T1.CodeBars) 'CodigoPaq',T1.CodeBars 'CodigoBar',T1.ItemCode 'CodigoArt',T1.Dscription 'Descripcion', " +
-                                     "T1.Quantity 'CantidadF', 0.000000 'CantidadR',T1.LineTotal 'Subtotal',T1.AcctCode 'Cuenta',T1.Project 'Proyecto', '0' 'Caja',T1.LineNum+1 'Linea', '' 'UnidadMed'  " +
-                                     "FROM " + TablaH + " T0, " + TablaD + " T1, OITM T2 " +
-                                     "WHERE T0.DocEntry = T1.DocEntry AND T2.ItemCode = T1.ItemCode AND T0.DocNum IN (" + documentos + ") ORDER BY T0.DocNum,T1.LineNum");
+
+                QryDetFact.AsignaBase(
+                    Properties.Settings.Default.BaseSAP);
+
+                QryDetFact.AsignaSQL(
+                    "SELECT DISTINCT " +
+                    "CAST(T0.U_Serie AS NVARCHAR(1))+" +
+                    "CAST(T0.U_NumDoc AS NVARCHAR(10)) 'Factura'," +
+                    "T0.DocNum 'Documento'," +
+                    "ISNULL(T2.U_COD_BAR_PAQ,T1.CodeBars) 'CodigoPaq'," +
+                    "T1.CodeBars 'CodigoBar'," +
+                    "T1.ItemCode 'CodigoArt'," +
+                    "T1.Dscription 'Descripcion'," +
+                    "T1.Quantity 'CantidadF'," +
+                    "0.000000 'CantidadR'," +
+                    "T1.LineTotal 'Subtotal'," +
+                    "T1.AcctCode 'Cuenta'," +
+                    "T1.Project 'Proyecto'," +
+                    "'0' 'Caja'," +
+                    "T1.LineNum+1 'Linea'," +
+                    "'' 'UnidadMed' " +
+                    "FROM " +
+                    TablaH +
+                    " T0 " +
+                    "INNER JOIN " +
+                    TablaD +
+                    " T1 ON T0.DocEntry = T1.DocEntry " +
+                    "INNER JOIN OITM T2 ON T2.ItemCode = T1.ItemCode " +
+                    "WHERE T0.DocNum IN (" +
+                    documentos +
+                    ") " +
+                   "ORDER BY T0.DocNum,T1.LineNum+1");
+
                 QryDetFact.Execute_DT();
-                dtDetFact = QryDetFact.ObtieneTabla();
-                this.dgv_fact.DataSource = dtDetFact;
-                //this.tsl_estatus.BackColor = Color.Green;
-                //this.tsl_estatus.Text = "Consulta terminada.";
-                MessageBox.Show("Consulta terminada.", "", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                this.gpb_fact.Visible = true;
 
-                //contador = 1;
-                foreach (DataGridViewRow row in dgv_fact.Rows)
+                dtDetFact =
+                    QryDetFact.ObtieneTabla();
+
+                dtDetFact =
+                    EliminarDuplicadosDetalleFactura(
+                        dtDetFact);
+
+                this.dgv_fact.DataSource =
+                    dtDetFact;
+
+                MessageBox.Show(
+                    "Consulta terminada.",
+                    "",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Asterisk);
+
+                this.gpb_fact.Visible =
+                    true;
+
+                foreach (DataGridViewRow row in
+                    dgv_fact.Rows)
                 {
-                    if (dgv_fact.Rows[row.Index].Selected == true)
+                    if (dgv_fact.Rows[
+                        row.Index].Selected)
                     {
-                        dgv_fact.Rows[row.Index].Selected = false;
+                        dgv_fact.Rows[
+                            row.Index].Selected =
+                            false;
                     }
-                    dgv_fact.Rows[row.Index].HeaderCell.Value = this.dgv_fact["Linea", row.Index].Value.ToString();
-                    //contador += 1;
+
+                    dgv_fact.Rows[
+                        row.Index]
+                        .HeaderCell.Value =
+                        this.dgv_fact[
+                            "Linea",
+                            row.Index]
+                            .Value
+                            .ToString();
                 }
 
-                FechaIni = DateTime.Now.ToString().Replace(" p.m.", "").Replace(" a.m.", "").Replace(" p. m.", "").Replace(" a. m.", "");
-                this.btn_confirmar.Enabled = true;
-                this.btn_imprimir.Enabled = true;
-                this.btn_pdfDetalle.Enabled = true;
-                this.btn_pdfResumen.Enabled = true;
+                FechaIni =
+                    DateTime.Now
+                        .ToString()
+                        .Replace(
+                            " p.m.",
+                            "")
+                        .Replace(
+                            " a.m.",
+                            "")
+                        .Replace(
+                            " p. m.",
+                            "")
+                        .Replace(
+                            " a. m.",
+                            "");
+
+                this.btn_confirmar.Enabled =
+                    true;
+
+                this.btn_imprimir.Enabled =
+                    true;
+
+                this.btn_pdfDetalle.Enabled =
+                    true;
+
+                this.btn_pdfResumen.Enabled =
+                    true;
+
                 this.dgv_fact.Focus();
-                Cursor.Current = Cursors.Default;
+
+                Cursor.Current =
+                    Cursors.Default;
             }
             else
             {
-                Cursor.Current = Cursors.Default;
-                MessageBox.Show("Documento(s) No. " + NumFact + " no encontrado(s). Verifique información.", "Documento", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                //this.tsl_estatus.Text = "Documento(s) no encontrado(s).";
-                //this.tsl_estatus.BackColor = Color.Red;
+                Cursor.Current =
+                    Cursors.Default;
+
+                MessageBox.Show(
+                    "Documento(s) No. " +
+                    NumFact +
+                    " no encontrado(s). Verifique información.",
+                    "Documento",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
                 LimpiaPantalla();
             }
+        }
+
+        private DataTable EliminarDuplicadosDetalleFactura(DataTable datos)
+        {
+            if (datos == null)
+            {
+                return new DataTable();
+            }
+
+            if (datos.Rows.Count == 0)
+            {
+                return datos;
+            }
+
+            DataTable resultado =
+                datos.Clone();
+
+            HashSet<string> registrosProcesados =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            foreach (DataRow fila in datos.Rows)
+            {
+                string factura =
+                    fila["Factura"] == DBNull.Value
+                        ? ""
+                        : fila["Factura"].ToString().Trim();
+
+                string documento =
+                    fila["Documento"] == DBNull.Value
+                        ? ""
+                        : fila["Documento"].ToString().Trim();
+
+                string codigoArt =
+                    fila["CodigoArt"] == DBNull.Value
+                        ? ""
+                        : fila["CodigoArt"].ToString().Trim();
+
+                string codigoBar =
+                    fila["CodigoBar"] == DBNull.Value
+                        ? ""
+                        : fila["CodigoBar"].ToString().Trim();
+
+                string descripcion =
+                    fila["Descripcion"] == DBNull.Value
+                        ? ""
+                        : fila["Descripcion"].ToString().Trim();
+
+                string clave =
+                    factura + "|" +
+                    documento + "|" +
+                    codigoArt + "|" +
+                    codigoBar + "|" +
+                    descripcion;
+
+                if (!registrosProcesados.Contains(clave))
+                {
+                    registrosProcesados.Add(clave);
+
+                    resultado.ImportRow(fila);
+                }
+            }
+
+            return resultado;
         }
 
         private void ConsultaFacturaConfirmada(string NumFact, int TotFact)
@@ -535,8 +2131,17 @@ namespace Suministro
             QryDetFact.AsignaSQL("SELECT NumFac 'Factura',Documento,CodigoPaq,CodigoBar,CodigoArt,Descripcion,CantidadF,CantidadR,TotalLin 'Subtotal',Cuenta,Proyecto,NoCaja 'Caja',Linea 'Linea', UnidadMed 'UnidadMed' " +
                                  "FROM " + TablaCD + " WHERE NumFac IN (" + NumFact + ") ORDER BY NoCaja ASC,Documento ASC,Linea ASC");
             QryDetFact.Execute_DT();
-            dtDetFact = QryDetFact.ObtieneTabla();
-            this.dgv_fact.DataSource = dtDetFact;
+
+            dtDetFact =
+                QryDetFact.ObtieneTabla();
+
+            dtDetFact =
+                EliminarDuplicadosDetalleFactura(
+                    dtDetFact);
+
+            this.dgv_fact.DataSource =
+                dtDetFact;
+
             this.btn_pdfDetalle.Enabled = true;
             this.btn_pdfResumen.Enabled = true;
             //this.tsl_estatus.BackColor = Color.Green;
@@ -670,7 +2275,7 @@ namespace Suministro
 
         private void GrabaPreliminar()
         {
-            string Parcialidad = "1";
+            string Parcialidad = "";
 
             clss_Query QryFactConf = new clss_Query();
             clss_Query QryDetFactConf = new clss_Query();
@@ -680,12 +2285,23 @@ namespace Suministro
             string g_Documento = "";
             int g_contador = 0;
 
+            string fechaIniSql = DateTime.Parse(FechaIni).ToString("yyyyMMdd HH:mm:ss");
+            string fechaFinSql = DateTime.Parse(FechaFin).ToString("yyyyMMdd HH:mm:ss");
+
+
             foreach (DataGridViewRow row in dgv_fact.Rows)
             {
                 g_Factura = this.dgv_fact["Factura", row.Index].Value.ToString();
                 g_Documento = this.dgv_fact["Documento", row.Index].Value.ToString();
 
+                if (g_Factura != t_Factura)
+                {
+                    Parcialidad = ObtieneParcialidad(g_Factura);
+                }
+
                 QryDetFactConf.AsignaBase(Properties.Settings.Default.BaseRS);
+
+
                 QryDetFactConf.AsignaSQL("INSERT INTO " + TablaCD + " VALUES (" + this.dgv_fact["Linea", row.Index].Value + "," + Parcialidad + ",'" + g_Factura + "','" + this.dgv_fact["CodigoPaq", row.Index].Value +
                                          "','" + this.dgv_fact["CodigoBar", row.Index].Value + "','" + this.dgv_fact["CodigoArt", row.Index].Value +
                                          "','" + this.dgv_fact["Descripcion", row.Index].Value.ToString().Replace("'", " ") + "'," + this.dgv_fact["CantidadF", row.Index].Value +
@@ -697,8 +2313,14 @@ namespace Suministro
                 if (g_Factura != t_Factura)
                 {
                     QryFactConf.AsignaBase(Properties.Settings.Default.BaseRS);
-                    QryFactConf.AsignaSQL("INSERT INTO " + Properties.Settings.Default.CONFIRMACIONES + " VALUES ('" + g_Factura + "','" + FechaIni +
-                                           "','" + FechaFin + "','" + TablaCH + "','" + Properties.Settings.Default.STS_PRELI + "','','')");
+                    QryFactConf.AsignaSQL(
+                    "INSERT INTO " + Properties.Settings.Default.CONFIRMACIONES +
+                    " VALUES ('" + g_Factura +
+                    "','" + fechaIniSql +
+                    "','" + fechaFinSql +
+                    "','" + TablaCH +
+                    "','" + Properties.Settings.Default.STS_PRELI +
+                    "','','')");
                     QryFactConf.Execute_IDU();
 
                     QryFactConf.AsignaBase(Properties.Settings.Default.BaseRS);
@@ -750,7 +2372,8 @@ namespace Suministro
             printDocument1.DefaultPageSettings.Margins.Right = 200;
             printDocument1.DefaultPageSettings.Margins.Bottom = 200;
             printDocument1.DefaultPageSettings.Landscape = true;
-            printDocument1.DocumentName = this.txt_fact1.Text;
+            printDocument1.DocumentName =
+            ObtenerFacturaActual();
             //Se Imprime Documento Y Oculto La Ventana De Mensaje De Impresion
             //Mediante El recargado del Controlador De Impresion a Standard.
             try
@@ -858,7 +2481,8 @@ namespace Suministro
             ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + "VENTAS, SERVICIOS Y ESPECTACULOS RECREATIVOS S.A DE C.V" + Func.CompletaCadena("", 60, " ", 'D') + "SUMINISTRO DE MERCANCIAS", e, 1);
             ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + Func.CompletaCadena("=", 139, "=", 'D'), e, 1);
             ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + Func.CompletaCadena("", 127, " ", 'D') + "Página: " + Func.CompletaCadena(String.Format("{0:0.#}", Pagina), 3, " ", 'I'), e, 1);
-            ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + "Fecha de Impresión: " + String.Format("{0:g}", DateTime.Now) + Func.CompletaCadena("", 20, " ", 'D') + "Confirmó: " + ObtieneQuienAutorizo(this.txt_fact1.Text), e, 1);
+            ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + "Fecha de Impresión: " + String.Format("{0:g}", DateTime.Now) + Func.CompletaCadena("", 20, " ", 'D') + "Confirmó: " + ObtieneQuienAutorizo(
+    ObtenerFacturaActual()), e, 1);
             ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + "Fecha de Confirmación: " + String.Format("{0:g}", this.txt_fechafin.Text), e, 1);
             ImprimeCadena(Func.CompletaCadena("", 10, " ", 'D') + Func.CompletaCadena("-", 139, "-", 'D'), e, 1);
             R = 10;
@@ -1323,35 +2947,20 @@ namespace Suministro
 
         private string ObtenerFacturasReporte()
         {
-            List<string> facturas = new List<string>();
-
-            if (this.txt_fact1.Text.Trim() != "")
-                facturas.Add("'" + this.txt_fact1.Text.Trim().Replace("'", "''") + "'");
-
-            if (this.txt_fact2.Text.Trim() != "")
-                facturas.Add("'" + this.txt_fact2.Text.Trim().Replace("'", "''") + "'");
-
-            if (this.txt_fact3.Text.Trim() != "")
-                facturas.Add("'" + this.txt_fact3.Text.Trim().Replace("'", "''") + "'");
-
-            return string.Join(",", facturas.ToArray());
+            return ObtenerFacturasSql();
         }
 
         private string ObtenerNombreFacturasReporte()
         {
-            List<string> facturas = new List<string>();
+            List<string> facturas =
+                ObtenerFacturasCapturadas();
 
-            if (this.txt_fact1.Text.Trim() != "")
-                facturas.Add(this.txt_fact1.Text.Trim());
-
-            if (this.txt_fact2.Text.Trim() != "")
-                facturas.Add(this.txt_fact2.Text.Trim());
-
-            if (this.txt_fact3.Text.Trim() != "")
-                facturas.Add(this.txt_fact3.Text.Trim());
-
-            return string.Join("_", facturas.ToArray());
+            return string.Join(
+                "_",
+                facturas.ToArray());
         }
+
+
 
         private DataTable ConsultarDetalleEmbarque(string facturasSql)
         {
@@ -1415,9 +3024,223 @@ namespace Suministro
             return consulta.ObtieneTabla();
         }
 
-        private void GenerarPdfDetalleEmbarque(DataTable datos, string rutaArchivo)
+            private void GenerarPdfDetalleEmbarque(DataTable datos, string rutaArchivo)
+            {
+                iTextSharp.text.Rectangle pagina = iTextSharp.text.PageSize.A3.Rotate();
+
+                using (FileStream archivo = new FileStream(
+                    rutaArchivo,
+                    FileMode.Create,
+                    FileAccess.Write,
+                    FileShare.None))
+                {
+                    using (PdfDocument documento = new PdfDocument(
+                        pagina,
+                        24f,
+                        24f,
+                        32f,
+                        30f))
+                    {
+                        PdfWriter.GetInstance(documento, archivo);
+
+                        documento.AddTitle("Detalle de Embarque");
+                        documento.AddCreator("Suministro de mercancía");
+                        documento.Open();
+
+                        AgregarEncabezadoPdf(
+                            documento,
+                            "DETALLE DE EMBARQUE",
+                            ObtenerNombreFacturasReporte());
+
+                        float[] anchos =
+                        {
+                    18f,
+                    7f,
+                    7f,
+                    7f,
+                    6f,
+                    5f,
+                    7f,
+                    8f,
+                    20f,
+                    7f,
+                    7f,
+                    8f,
+                    7f,
+                    8f,
+                    8f
+                };
+
+                        PdfPTable tabla = new PdfPTable(anchos);
+                        tabla.WidthPercentage = 100f;
+                        tabla.HeaderRows = 1;
+                        tabla.SplitLate = false;
+                        tabla.SplitRows = true;
+
+                        string[] encabezados =
+                        {
+                    "Cliente",
+                    "Fecha inicio",
+                    "Fecha termina",
+                    "Docto Fiscal",
+                    "Docto SAP",
+                    "Partida",
+                    "Código producto",
+                    "Código barras",
+                    "Descripción",
+                    "Cant. facturada",
+                    "Cant. embarcada",
+                    "Tipo / No. empaque",
+                    "Nombre empaque",
+                    "Observaciones 1",
+                    "Observaciones 2"
+                };
+
+                        foreach (string encabezado in encabezados)
+                        {
+                            tabla.AddCell(
+                                CrearCeldaEncabezado(encabezado, 6.5f));
+                        }
+
+                        string facturaAnterior = "";
+                        string documentoAnterior = "";
+
+                        foreach (DataRow fila in datos.Rows)
+                        {
+                            string clienteActual =
+                                ValorTexto(fila["Cliente"]);
+
+                            string fechaInicioActual =
+                                ValorFecha(fila["Fecha inicio"]);
+
+                            string fechaTerminaActual =
+                                ValorFecha(fila["Fecha termina"]);
+
+                            string facturaActual =
+                                ValorTexto(fila["Docto Fiscal"]);
+
+                            string documentoActual =
+                                ValorTexto(fila["Docto SAP"]);
+
+                            string empaqueActual =
+                                ValorTexto(fila["Tipo y numero de empaque"]);
+
+                            string nombreEmpaqueActual =
+                                ValorTexto(fila["Nombre emp"]);
+
+                            string observacion1Actual =
+                                ValorTexto(fila["Observaciones 1"]);
+
+                            string observacion2Actual =
+                                ValorTexto(fila["Observaciones 2"]);
+
+                            bool nuevaFactura =
+                                facturaActual != facturaAnterior ||
+                                documentoActual != documentoAnterior;
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nuevaFactura ? clienteActual : "",
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_LEFT));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nuevaFactura ? fechaInicioActual : "",
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nuevaFactura ? fechaTerminaActual : "",
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nuevaFactura ? facturaActual : "",
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nuevaFactura ? documentoActual : "",
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorTexto(fila["No. Partida"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorTexto(fila["Codigo producto"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorTexto(fila["Codigo de Barras"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorTexto(fila["Descripcion"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_LEFT));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorCantidad(fila["Cantidad Facturada"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_RIGHT));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    ValorCantidad(fila["Cantidad Embarcada"]),
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_RIGHT));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    empaqueActual,
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    nombreEmpaqueActual,
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_CENTER));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    observacion1Actual,
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_LEFT));
+
+                            tabla.AddCell(
+                                CrearCeldaDato(
+                                    observacion2Actual,
+                                    6f,
+                                    iTextSharp.text.Element.ALIGN_LEFT));
+
+                            facturaAnterior = facturaActual;
+                            documentoAnterior = documentoActual;
+                        }
+
+                        documento.Add(tabla);
+                        AgregarPiePdf(documento);
+                    }
+                }
+            }
+
+        private void GenerarPdfResumenEmbarque(DataTable datos, string rutaArchivo)
         {
-            iTextSharp.text.Rectangle pagina = iTextSharp.text.PageSize.A3.Rotate();
+            iTextSharp.text.Rectangle pagina = iTextSharp.text.PageSize.A4;
 
             using (FileStream archivo = new FileStream(
                 rutaArchivo,
@@ -1427,355 +3250,697 @@ namespace Suministro
             {
                 using (PdfDocument documento = new PdfDocument(
                     pagina,
-                    24f,
-                    24f,
-                    32f,
-                    30f))
+                    22f,
+                    22f,
+                    18f,
+                    18f))
                 {
-                    PdfWriter.GetInstance(documento, archivo);
+                    PdfWriter writer = PdfWriter.GetInstance(documento, archivo);
 
-                    documento.AddTitle("Detalle de Embarque");
+                    documento.AddTitle("Entrega de Pedido");
                     documento.AddCreator("Suministro de mercancía");
                     documento.Open();
 
-                    AgregarEncabezadoPdf(
+                    AgregarFormatoEntregaPedido(
                         documento,
-                        "DETALLE DE EMBARQUE",
-                        ObtenerNombreFacturasReporte());
+                        datos,
+                        "ORIGINAL");
 
-                    float[] anchos =
-                    {
-                18f,
-                7f,
-                7f,
-                7f,
-                6f,
-                5f,
-                7f,
-                8f,
-                20f,
-                7f,
-                7f,
-                8f,
-                7f,
-                8f,
-                8f
-            };
+                    documento.Add(
+                        CrearLineaCorte());
 
-                    PdfPTable tabla = new PdfPTable(anchos);
-                    tabla.WidthPercentage = 100f;
-                    tabla.HeaderRows = 1;
-                    tabla.SplitLate = false;
-                    tabla.SplitRows = true;
+                    AgregarFormatoEntregaPedido(
+                        documento,
+                        datos,
+                        "COPIA");
 
-                    string[] encabezados =
-                    {
-                "Cliente",
-                "Fecha inicio",
-                "Fecha termina",
-                "Docto Fiscal",
-                "Docto SAP",
-                "Partida",
-                "Código producto",
-                "Código barras",
-                "Descripción",
-                "Cant. facturada",
-                "Cant. embarcada",
-                "Tipo / No. empaque",
-                "Nombre empaque",
-                "Observaciones 1",
-                "Observaciones 2"
-            };
-
-                    foreach (string encabezado in encabezados)
-                    {
-                        tabla.AddCell(
-                            CrearCeldaEncabezado(encabezado, 6.5f));
-                    }
-
-                    string clienteAnterior = "";
-                    string fechaInicioAnterior = "";
-                    string fechaTerminaAnterior = "";
-                    string facturaAnterior = "";
-                    string documentoAnterior = "";
-                    string empaqueAnterior = "";
-
-                    foreach (DataRow fila in datos.Rows)
-                    {
-                        string clienteActual =
-                            ValorTexto(fila["Cliente"]);
-
-                        string fechaInicioActual =
-                            ValorFecha(fila["Fecha inicio"]);
-
-                        string fechaTerminaActual =
-                            ValorFecha(fila["Fecha termina"]);
-
-                        string facturaActual =
-                            ValorTexto(fila["Docto Fiscal"]);
-
-                        string documentoActual =
-                            ValorTexto(fila["Docto SAP"]);
-
-                        string empaqueActual =
-                            ValorTexto(fila["Tipo y numero de empaque"]);
-
-                        bool nuevaFactura =
-                            facturaActual != facturaAnterior ||
-                            documentoActual != documentoAnterior;
-
-                        bool nuevoEmpaque =
-                            nuevaFactura ||
-                            empaqueActual != empaqueAnterior;
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? clienteActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? fechaInicioActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? fechaTerminaActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? facturaActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? documentoActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["No. Partida"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Codigo producto"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Codigo de Barras"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Descripcion"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorCantidad(fila["Cantidad Facturada"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_RIGHT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorCantidad(fila["Cantidad Embarcada"]),
-                                6f,
-                                iTextSharp.text.Element.ALIGN_RIGHT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevoEmpaque ? empaqueActual : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevoEmpaque
-                                    ? ValorTexto(fila["Nombre emp"])
-                                    : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevoEmpaque
-                                    ? ValorTexto(fila["Observaciones 1"])
-                                    : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevoEmpaque
-                                    ? ValorTexto(fila["Observaciones 2"])
-                                    : "",
-                                6f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        clienteAnterior = clienteActual;
-                        fechaInicioAnterior = fechaInicioActual;
-                        fechaTerminaAnterior = fechaTerminaActual;
-                        facturaAnterior = facturaActual;
-                        documentoAnterior = documentoActual;
-                        empaqueAnterior = empaqueActual;
-                    }
-
-                    documento.Add(tabla);
-                    AgregarPiePdf(documento);
+                    documento.Close();
                 }
             }
         }
 
-        private void GenerarPdfResumenEmbarque(DataTable datos, string rutaArchivo)
+        private void AgregarFormatoEntregaPedido(
+    PdfDocument documento,
+    DataTable datos,
+    string tipoCopia)
         {
-            iTextSharp.text.Rectangle pagina = iTextSharp.text.PageSize.A4.Rotate();
+            string cliente = "";
+            string fecha = "";
+            string facturas = "";
+            string documentosSap = "";
+            string observaciones = "";
 
-            using (FileStream archivo = new FileStream(
-                rutaArchivo,
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.None))
+            List<string> listaFacturas = new List<string>();
+            List<string> listaDocumentosSap = new List<string>();
+            List<string> listaObservacionesDetalle = new List<string>();
+
+            int cantidadCajas = 0;
+            int cantidadPaquetes = 0;
+            int cantidadBolsas = 0;
+            int cantidadOtros = 0;
+
+            List<string> empaquesContados = new List<string>();
+
+            foreach (DataRow fila in datos.Rows)
             {
-                using (PdfDocument documento = new PdfDocument(
-                    pagina,
-                    32f,
-                    32f,
-                    36f,
-                    30f))
+                string clienteFila =
+                    ValorTexto(fila["Cliente"]);
+
+                string fechaFila =
+                    ValorFecha(fila["Fecha inicio"]);
+
+                string facturaFila =
+                    ValorTexto(fila["Docto Fiscal"]);
+
+                string documentoFila =
+                    ValorTexto(fila["Docto SAP"]);
+
+                string noEmpaque =
+                    ValorTexto(fila["Tipo y numero de empaque"]);
+
+                string nombreEmpaque =
+                    ValorTexto(fila["Nombre emp"]);
+
+                string observacionFila =
+                    ValorTexto(fila["Observaciones 1"]);
+
+                if (cliente == "")
                 {
-                    PdfWriter.GetInstance(documento, archivo);
+                    cliente = clienteFila;
+                }
 
-                    documento.AddTitle("Resumen de Embarque");
-                    documento.AddCreator("Suministro de mercancía");
-                    documento.Open();
+                if (fecha == "")
+                {
+                    fecha = fechaFila;
+                }
 
-                    AgregarEncabezadoPdf(
-                        documento,
-                        "RESUMEN DE EMBARQUE",
-                        ObtenerNombreFacturasReporte());
+                if (facturaFila != "" &&
+                    !listaFacturas.Contains(facturaFila))
+                {
+                    listaFacturas.Add(facturaFila);
+                }
 
-                    float[] anchos =
+                if (documentoFila != "" &&
+                    !listaDocumentosSap.Contains(documentoFila))
+                {
+                    listaDocumentosSap.Add(documentoFila);
+                }
+
+                if (noEmpaque != "" &&
+                    observacionFila != "" &&
+                    observacionFila.Trim().ToUpper().Contains("LUJO"))
+                {
+                    string observacionLujo =
+                        noEmpaque + " - LUJO";
+
+                    if (!listaObservacionesDetalle.Contains(
+                        observacionLujo))
                     {
-                26f,
-                10f,
-                10f,
-                10f,
-                14f,
-                12f,
-                18f
-            };
-
-                    PdfPTable tabla = new PdfPTable(anchos);
-                    tabla.WidthPercentage = 100f;
-                    tabla.HeaderRows = 1;
-                    tabla.SpacingBefore = 8f;
-                    tabla.SplitLate = false;
-                    tabla.SplitRows = true;
-
-                    string[] encabezados =
-                    {
-                "Cliente",
-                "Fecha inicio",
-                "Docto Fiscal",
-                "Docto SAP",
-                "Tipo y número de empaque",
-                "Nombre empaque",
-                "Observaciones 1"
-            };
-
-                    foreach (string encabezado in encabezados)
-                    {
-                        tabla.AddCell(
-                            CrearCeldaEncabezado(encabezado, 8f));
+                        listaObservacionesDetalle.Add(
+                            observacionLujo);
                     }
+                }
 
-                    string clienteAnterior = "";
-                    string fechaInicioAnterior = "";
-                    string facturaAnterior = "";
-                    string documentoAnterior = "";
+                if (noEmpaque != "" &&
+                    !empaquesContados.Contains(noEmpaque))
+                {
+                    empaquesContados.Add(noEmpaque);
 
-                    foreach (DataRow fila in datos.Rows)
+                    string tipo =
+                        nombreEmpaque
+                            .Trim()
+                            .ToUpper();
+
+                    if (tipo == "CAJA")
                     {
-                        string clienteActual =
-                            ValorTexto(fila["Cliente"]);
-
-                        string fechaInicioActual =
-                            ValorFecha(fila["Fecha inicio"]);
-
-                        string facturaActual =
-                            ValorTexto(fila["Docto Fiscal"]);
-
-                        string documentoActual =
-                            ValorTexto(fila["Docto SAP"]);
-
-                        bool nuevaFactura =
-                            facturaActual != facturaAnterior ||
-                            documentoActual != documentoAnterior;
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? clienteActual : "",
-                                8f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? fechaInicioActual : "",
-                                8f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? facturaActual : "",
-                                8f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                nuevaFactura ? documentoActual : "",
-                                8f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Tipo y numero de empaque"]),
-                                8f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Nombre emp"]),
-                                8f,
-                                iTextSharp.text.Element.ALIGN_CENTER));
-
-                        tabla.AddCell(
-                            CrearCeldaDato(
-                                ValorTexto(fila["Observaciones 1"]),
-                                8f,
-                                iTextSharp.text.Element.ALIGN_LEFT));
-
-                        clienteAnterior = clienteActual;
-                        fechaInicioAnterior = fechaInicioActual;
-                        facturaAnterior = facturaActual;
-                        documentoAnterior = documentoActual;
+                        cantidadCajas++;
                     }
-
-                    documento.Add(tabla);
-                    AgregarPiePdf(documento);
+                    else if (tipo == "BULTO")
+                    {
+                        cantidadBolsas++;
+                    }
+                    else if (tipo == "PAQUETE")
+                    {
+                        cantidadPaquetes++;
+                    }
+                    else if (tipo == "BOLSA")
+                    {
+                        cantidadBolsas++;
+                    }
+                    else
+                    {
+                        cantidadOtros++;
+                    }
                 }
             }
+
+            facturas =
+                string.Join(
+                    " / ",
+                    listaFacturas.ToArray());
+
+            documentosSap =
+                string.Join(
+                    " / ",
+                    listaDocumentosSap.ToArray());
+
+            observaciones =
+                string.Join(
+                    "\n",
+                    listaObservacionesDetalle.ToArray());
+
+            iTextSharp.text.BaseColor negro =
+                iTextSharp.text.BaseColor.BLACK;
+
+            iTextSharp.text.Font fuenteTitulo =
+                iTextSharp.text.FontFactory.GetFont(
+                    iTextSharp.text.FontFactory.HELVETICA_BOLD,
+                    17f,
+                    negro);
+
+            iTextSharp.text.Font fuenteSubtitulo =
+                iTextSharp.text.FontFactory.GetFont(
+                    iTextSharp.text.FontFactory.HELVETICA_BOLD,
+                    8f,
+                    negro);
+
+            iTextSharp.text.Font fuenteNormal =
+                iTextSharp.text.FontFactory.GetFont(
+                    iTextSharp.text.FontFactory.HELVETICA,
+                    8f,
+                    negro);
+
+            iTextSharp.text.Font fuenteNormalGrande =
+                iTextSharp.text.FontFactory.GetFont(
+                    iTextSharp.text.FontFactory.HELVETICA,
+                    9f,
+                    negro);
+
+            PdfPTable encabezado =
+                new PdfPTable(
+                    new float[]
+                    {
+                18f,
+                67f,
+                15f
+                    });
+
+            encabezado.WidthPercentage = 100f;
+
+            PdfPCell celdaLogo =
+                new PdfPCell();
+
+            celdaLogo.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celdaLogo.BorderWidth = 1.2f;
+
+            celdaLogo.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            celdaLogo.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celdaLogo.PaddingTop = 3f;
+            celdaLogo.PaddingBottom = 3f;
+            celdaLogo.PaddingLeft = 3f;
+            celdaLogo.PaddingRight = 3f;
+
+            using (MemoryStream msLogo = new MemoryStream())
+            {
+                Properties.Resources.VESER.Save(
+                    msLogo,
+                    System.Drawing.Imaging.ImageFormat.Png);
+
+                iTextSharp.text.Image logoVeser =
+                    iTextSharp.text.Image.GetInstance(
+                        msLogo.ToArray());
+
+                logoVeser.ScaleToFit(
+                    85f,
+                    52f);
+
+                logoVeser.Alignment =
+                    iTextSharp.text.Element.ALIGN_CENTER;
+
+                celdaLogo.AddElement(
+                    logoVeser);
+            }
+
+            encabezado.AddCell(
+                celdaLogo);
+
+            PdfPCell celdaTitulo =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        "ENTREGA DE PEDIDO",
+                        fuenteTitulo));
+
+            celdaTitulo.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celdaTitulo.BorderWidth = 1.2f;
+
+            celdaTitulo.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            celdaTitulo.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celdaTitulo.PaddingTop = 12f;
+            celdaTitulo.PaddingBottom = 12f;
+
+            encabezado.AddCell(
+                celdaTitulo);
+
+            PdfPCell celdaTipo =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        tipoCopia,
+                        fuenteSubtitulo));
+
+            celdaTipo.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celdaTipo.BorderWidth = 1.2f;
+
+            celdaTipo.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            celdaTipo.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celdaTipo.Padding = 5f;
+
+            encabezado.AddCell(
+                celdaTipo);
+
+            documento.Add(
+                encabezado);
+
+            PdfPTable informacion =
+                new PdfPTable(
+                    new float[]
+                    {
+                16f,
+                34f,
+                16f,
+                34f
+                    });
+
+            informacion.WidthPercentage = 100f;
+
+            informacion.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "LOCAL:",
+                    fuenteSubtitulo));
+
+            informacion.AddCell(
+                CrearCeldaFormatoValor(
+                    cliente,
+                    fuenteNormalGrande));
+
+            informacion.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "FECHA:",
+                    fuenteSubtitulo));
+
+            informacion.AddCell(
+                CrearCeldaFormatoValor(
+                    fecha,
+                    fuenteNormalGrande));
+
+            informacion.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "No. DE FACTURAS:",
+                    fuenteSubtitulo));
+
+            informacion.AddCell(
+                CrearCeldaFormatoValor(
+                    facturas,
+                    fuenteNormalGrande));
+
+            informacion.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "DOCTO. SAP:",
+                    fuenteSubtitulo));
+
+            informacion.AddCell(
+                CrearCeldaFormatoValor(
+                    documentosSap,
+                    fuenteNormalGrande));
+
+            documento.Add(
+                informacion);
+
+            PdfPTable tablaContenido =
+                new PdfPTable(
+                    new float[]
+                    {
+                34f,
+                16f,
+                16f,
+                17f,
+                17f
+                    });
+
+            tablaContenido.WidthPercentage = 100f;
+
+            tablaContenido.AddCell(
+                CrearCeldaFormatoEncabezado(
+                    "CONTENIDO",
+                    fuenteSubtitulo));
+
+            tablaContenido.AddCell(
+                CrearCeldaFormatoEncabezado(
+                    "PEDIDO",
+                    fuenteSubtitulo));
+
+            tablaContenido.AddCell(
+                CrearCeldaFormatoEncabezado(
+                    "COMPL. 1",
+                    fuenteSubtitulo));
+
+            tablaContenido.AddCell(
+                CrearCeldaFormatoEncabezado(
+                    "COMPL. 2",
+                    fuenteSubtitulo));
+
+            tablaContenido.AddCell(
+                CrearCeldaFormatoEncabezado(
+                    "TOTAL",
+                    fuenteSubtitulo));
+
+            AgregarFilaEmpaque(
+                tablaContenido,
+                "C. DE CARTON",
+                cantidadCajas,
+                fuenteNormalGrande);
+
+            AgregarFilaEmpaque(
+                tablaContenido,
+                "C. DE PLASTICO",
+                0,
+                fuenteNormalGrande);
+
+            AgregarFilaEmpaque(
+                tablaContenido,
+                "PAQUETES",
+                cantidadPaquetes,
+                fuenteNormalGrande);
+
+            AgregarFilaEmpaque(
+                tablaContenido,
+                "BOLSAS",
+                cantidadBolsas,
+                fuenteNormalGrande);
+
+            if (cantidadOtros > 0)
+            {
+                AgregarFilaEmpaque(
+                    tablaContenido,
+                    "OTROS",
+                    cantidadOtros,
+                    fuenteNormalGrande);
+            }
+
+            documento.Add(
+                tablaContenido);
+
+            PdfPTable observacionesTabla =
+                new PdfPTable(
+                    new float[]
+                    {
+                20f,
+                80f
+                    });
+
+            observacionesTabla.WidthPercentage = 100f;
+
+            observacionesTabla.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "OBSERVACIONES:",
+                    fuenteSubtitulo));
+
+            PdfPCell celdaObservaciones =
+                CrearCeldaFormatoValor(
+                    observaciones,
+                    fuenteNormalGrande);
+
+            celdaObservaciones.MinimumHeight = 55f;
+
+            observacionesTabla.AddCell(
+                celdaObservaciones);
+
+            documento.Add(
+                observacionesTabla);
+
+            PdfPTable firmas =
+                new PdfPTable(
+                    new float[]
+                    {
+                12f,
+                38f,
+                12f,
+                38f
+                    });
+
+            firmas.WidthPercentage = 100f;
+
+            firmas.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "ENTREGA:",
+                    fuenteSubtitulo));
+
+            PdfPCell entrega =
+                CrearCeldaFormatoValor(
+                    "",
+                    fuenteNormal);
+
+            entrega.MinimumHeight = 26f;
+
+            firmas.AddCell(
+                entrega);
+
+            firmas.AddCell(
+                CrearCeldaFormatoEtiqueta(
+                    "RECIBE:",
+                    fuenteSubtitulo));
+
+            PdfPCell recibe =
+                CrearCeldaFormatoValor(
+                    "",
+                    fuenteNormal);
+
+            recibe.MinimumHeight = 26f;
+
+            firmas.AddCell(
+                recibe);
+
+            documento.Add(
+                firmas);
+        }
+
+        private void AgregarFilaEmpaque(
+    PdfPTable tabla,
+    string descripcion,
+    int cantidad,
+    iTextSharp.text.Font fuente)
+        {
+            PdfPCell celdaDescripcion =
+                CrearCeldaFormatoValor(
+                    descripcion,
+                    fuente);
+
+            celdaDescripcion.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_LEFT;
+
+            tabla.AddCell(celdaDescripcion);
+
+            PdfPCell celdaPedido =
+                CrearCeldaFormatoValor(
+                    cantidad > 0
+                        ? cantidad.ToString()
+                        : "",
+                    fuente);
+
+            celdaPedido.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            tabla.AddCell(celdaPedido);
+
+            PdfPCell celdaComplemento1 =
+                CrearCeldaFormatoValor(
+                    "",
+                    fuente);
+
+            celdaComplemento1.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            tabla.AddCell(celdaComplemento1);
+
+            PdfPCell celdaComplemento2 =
+                CrearCeldaFormatoValor(
+                    "",
+                    fuente);
+
+            celdaComplemento2.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            tabla.AddCell(celdaComplemento2);
+
+            PdfPCell celdaTotal =
+                CrearCeldaFormatoValor(
+                    cantidad > 0
+                        ? cantidad.ToString()
+                        : "",
+                    fuente);
+
+            celdaTotal.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            tabla.AddCell(celdaTotal);
+        }
+
+        private PdfPCell CrearCeldaFormatoEtiqueta(
+            string texto,
+            iTextSharp.text.Font fuente)
+        {
+            PdfPCell celda =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        texto,
+                        fuente));
+
+            celda.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celda.BorderWidth = 0.8f;
+
+            celda.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_LEFT;
+
+            celda.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celda.PaddingTop = 4f;
+            celda.PaddingBottom = 4f;
+            celda.PaddingLeft = 4f;
+            celda.PaddingRight = 4f;
+
+            celda.BackgroundColor =
+                new iTextSharp.text.BaseColor(
+                    245,
+                    245,
+                    245);
+
+            return celda;
+        }
+
+        private PdfPCell CrearCeldaFormatoValor(
+            string texto,
+            iTextSharp.text.Font fuente)
+        {
+            PdfPCell celda =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        texto,
+                        fuente));
+
+            celda.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celda.BorderWidth = 0.8f;
+
+            celda.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_LEFT;
+
+            celda.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celda.PaddingTop = 4f;
+            celda.PaddingBottom = 4f;
+            celda.PaddingLeft = 5f;
+            celda.PaddingRight = 5f;
+
+            return celda;
+        }
+
+        private PdfPCell CrearCeldaFormatoEncabezado(
+            string texto,
+            iTextSharp.text.Font fuente)
+        {
+            PdfPCell celda =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        texto,
+                        fuente));
+
+            celda.Border =
+                iTextSharp.text.Rectangle.BOX;
+
+            celda.BorderWidth = 0.8f;
+
+            celda.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            celda.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celda.PaddingTop = 5f;
+            celda.PaddingBottom = 5f;
+            celda.PaddingLeft = 3f;
+            celda.PaddingRight = 3f;
+
+            celda.BackgroundColor =
+                new iTextSharp.text.BaseColor(
+                    235,
+                    235,
+                    235);
+
+            return celda;
+        }
+
+        private iTextSharp.text.pdf.PdfPTable CrearLineaCorte()
+        {
+            PdfPTable tabla =
+                new PdfPTable(1);
+
+            tabla.WidthPercentage = 100f;
+            tabla.SpacingBefore = 7f;
+            tabla.SpacingAfter = 7f;
+
+            iTextSharp.text.Font fuente =
+                iTextSharp.text.FontFactory.GetFont(
+                    iTextSharp.text.FontFactory.HELVETICA,
+                    7f,
+                    new iTextSharp.text.BaseColor(
+                        100,
+                        100,
+                        100));
+
+            PdfPCell celda =
+                new PdfPCell(
+                    new iTextSharp.text.Phrase(
+                        "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   CORTAR AQUI   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+                        fuente));
+
+            celda.Border =
+                iTextSharp.text.Rectangle.NO_BORDER;
+
+            celda.HorizontalAlignment =
+                iTextSharp.text.Element.ALIGN_CENTER;
+
+            celda.VerticalAlignment =
+                iTextSharp.text.Element.ALIGN_MIDDLE;
+
+            celda.PaddingTop = 2f;
+            celda.PaddingBottom = 2f;
+
+            tabla.AddCell(
+                celda);
+
+            return tabla;
         }
 
         private void AgregarEncabezadoPdf(PdfDocument documento, string titulo, string facturas)
