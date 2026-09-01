@@ -1592,27 +1592,6 @@ namespace Suministro
             int cantidadPlastico = 0;
             int cantidadPaquetes = 0;
 
-            clss_Query consultaEmpaques =
-                new clss_Query();
-
-            consultaEmpaques.AsignaBase(
-                Properties.Settings.Default.BaseRS);
-
-            consultaEmpaques.AsignaSQL(
-                "SELECT " +
-                "NumFac, " +
-                "NoCaja " +
-                "FROM " + TablaCD + " " +
-                "WHERE NumFac IN (" + facturasSql + ") " +
-                "AND ISNULL(LTRIM(RTRIM(NoCaja)), '') <> '' " +
-                "AND LTRIM(RTRIM(NoCaja)) <> '0' " +
-                "ORDER BY NumFac, NoCaja");
-
-            consultaEmpaques.Execute_DT();
-
-            DataTable empaques =
-                consultaEmpaques.ObtieneTabla();
-
             HashSet<string> cajasContadas =
                 new HashSet<string>(
                     StringComparer.OrdinalIgnoreCase);
@@ -1629,22 +1608,30 @@ namespace Suministro
                 new HashSet<string>(
                     StringComparer.OrdinalIgnoreCase);
 
-            if (empaques != null)
+            if (dgv_fact != null)
             {
-                foreach (DataRow fila in empaques.Rows)
+                foreach (DataGridViewRow fila in
+                    dgv_fact.Rows)
                 {
+                    if (fila.IsNewRow)
+                    {
+                        continue;
+                    }
+
                     string factura =
-                        fila["NumFac"] == DBNull.Value
+                        fila.Cells["Factura"].Value == null
                             ? ""
-                            : fila["NumFac"]
+                            : fila.Cells["Factura"]
+                                .Value
                                 .ToString()
                                 .Trim()
                                 .ToUpper();
 
                     string noCaja =
-                        fila["NoCaja"] == DBNull.Value
+                        fila.Cells["Caja"].Value == null
                             ? ""
-                            : fila["NoCaja"]
+                            : fila.Cells["Caja"]
+                                .Value
                                 .ToString()
                                 .Trim()
                                 .ToUpper();
@@ -1681,16 +1668,16 @@ namespace Suministro
                             continue;
                         }
 
-                        string clave =
-                            factura +
-                            "|" +
-                            empaque;
+                        string clave = empaque;
 
                         if (empaque.StartsWith("CP"))
                         {
-                            if (!plasticosContados.Contains(clave))
+                            if (!plasticosContados.Contains(
+                                clave))
                             {
-                                plasticosContados.Add(clave);
+                                plasticosContados.Add(
+                                    clave);
+
                                 cantidadPlastico++;
                             }
 
@@ -1699,9 +1686,12 @@ namespace Suministro
 
                         if (empaque.StartsWith("C"))
                         {
-                            if (!cajasContadas.Contains(clave))
+                            if (!cajasContadas.Contains(
+                                clave))
                             {
-                                cajasContadas.Add(clave);
+                                cajasContadas.Add(
+                                    clave);
+
                                 cantidadCajas++;
                             }
 
@@ -1710,9 +1700,12 @@ namespace Suministro
 
                         if (empaque.StartsWith("B"))
                         {
-                            if (!bolsasContadas.Contains(clave))
+                            if (!bolsasContadas.Contains(
+                                clave))
                             {
-                                bolsasContadas.Add(clave);
+                                bolsasContadas.Add(
+                                    clave);
+
                                 cantidadBolsas++;
                             }
 
@@ -1721,9 +1714,12 @@ namespace Suministro
 
                         if (empaque.StartsWith("P"))
                         {
-                            if (!paquetesContados.Contains(clave))
+                            if (!paquetesContados.Contains(
+                                clave))
                             {
-                                paquetesContados.Add(clave);
+                                paquetesContados.Add(
+                                    clave);
+
                                 cantidadPaquetes++;
                             }
 
@@ -3382,13 +3378,34 @@ namespace Suministro
                     nRenglon = e.RowIndex;
                     nColumna = e.ColumnIndex;
                     this.txt_temp.Visible = true;
-                    this.txt_temp.Text = this.dgv_fact[e.ColumnIndex, e.RowIndex].Value.ToString();
+
+                    this.txt_temp.Text =
+                        this.dgv_fact[
+                            e.ColumnIndex,
+                            e.RowIndex]
+                            .Value
+                            .ToString();
+
+                    this.txt_temp.BringToFront();
+
                     this.txt_temp.Focus();
-                    this.tmr_tiempo.Enabled = true;
+
+                    this.txt_temp.SelectionStart =
+                        this.txt_temp.Text.Length;
+
+                    this.txt_temp.SelectionLength =
+    0;
+
+                    this.tmr_tiempo.Enabled =
+                        false;
                 }
                 else
                 {
                     this.txt_temp.Visible = false;
+
+                    MostrarResumenEmpaques(
+                        ObtenerFacturasSql());
+
                     this.dgv_fact.Focus();
                 }
             }
