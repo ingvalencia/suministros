@@ -1672,12 +1672,8 @@ namespace Suministro
 
                         if (empaque.StartsWith("CP"))
                         {
-                            if (!plasticosContados.Contains(
-                                clave))
+                            if (plasticosContados.Add(empaque))
                             {
-                                plasticosContados.Add(
-                                    clave);
-
                                 cantidadPlastico++;
                             }
 
@@ -4180,9 +4176,24 @@ namespace Suministro
             int cantidadCajas = 0;
             int cantidadPaquetes = 0;
             int cantidadBolsas = 0;
+            int cantidadPlastico = 0;
             int cantidadOtros = 0;
 
-            List<string> empaquesContados = new List<string>();
+            HashSet<string> cajasContadas =
+            new HashSet<string>(
+                StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> bolsasContadas =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> plasticosContados =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> paquetesContados =
+                new HashSet<string>(
+                    StringComparer.OrdinalIgnoreCase);
 
             foreach (DataRow fila in datos.Rows)
             {
@@ -4244,35 +4255,73 @@ namespace Suministro
                     }
                 }
 
-                if (noEmpaque != "" &&
-                    !empaquesContados.Contains(noEmpaque))
+                if (noEmpaque != "")
                 {
-                    empaquesContados.Add(noEmpaque);
+                    string empaquesNormalizados =
+                        noEmpaque
+                            .Replace(";", ",")
+                            .Replace("/", ",")
+                            .Replace("\\", ",");
 
-                    string tipo =
-                        nombreEmpaque
-                            .Trim()
-                            .ToUpper();
+                    string[] empaquesIndividuales =
+                        empaquesNormalizados.Split(
+                            new char[] { ',' },
+                            StringSplitOptions.RemoveEmptyEntries);
 
-                    if (tipo == "CAJA")
+                    foreach (string empaqueBase in
+                        empaquesIndividuales)
                     {
-                        cantidadCajas++;
-                    }
-                    else if (tipo == "BULTO")
-                    {
-                        cantidadBolsas++;
-                    }
-                    else if (tipo == "PAQUETE")
-                    {
-                        cantidadPaquetes++;
-                    }
-                    else if (tipo == "BOLSA")
-                    {
-                        cantidadBolsas++;
-                    }
-                    else
-                    {
-                        cantidadOtros++;
+                        string empaque =
+                            empaqueBase
+                                .Trim()
+                                .Replace(" ", "")
+                                .ToUpper();
+
+                        if (empaque == "" ||
+                            empaque == "0")
+                        {
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("CP"))
+                        {
+                            if (plasticosContados.Add(empaque))
+                            {
+                                cantidadOtros++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("C"))
+                        {
+                            if (cajasContadas.Add(empaque))
+                            {
+                                cantidadCajas++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("B"))
+                        {
+                            if (bolsasContadas.Add(empaque))
+                            {
+                                cantidadBolsas++;
+                            }
+
+                            continue;
+                        }
+
+                        if (empaque.StartsWith("P"))
+                        {
+                            if (paquetesContados.Add(empaque))
+                            {
+                                cantidadPaquetes++;
+                            }
+
+                            continue;
+                        }
                     }
                 }
             }
@@ -4523,7 +4572,7 @@ namespace Suministro
             AgregarFilaEmpaque(
                 tablaContenido,
                 "C. DE PLASTICO",
-                0,
+                cantidadPlastico,
                 fuenteNormalGrande);
 
             AgregarFilaEmpaque(
@@ -4538,14 +4587,7 @@ namespace Suministro
                 cantidadBolsas,
                 fuenteNormalGrande);
 
-            if (cantidadOtros > 0)
-            {
-                AgregarFilaEmpaque(
-                    tablaContenido,
-                    "OTROS",
-                    cantidadOtros,
-                    fuenteNormalGrande);
-            }
+            
 
             documento.Add(
                 tablaContenido);
